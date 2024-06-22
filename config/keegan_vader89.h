@@ -1,9 +1,10 @@
 #ifdef CONFIG_TOP
 #include "proffieboard_v3_config.h"
 
-//#define SABER_DOOKU
-//#define SABER_VADER
-#define SABER_CAL
+// #define SABER_DOOKU
+// #define SABER_VADER
+#define SABER_VEEONE
+// #define SABER_CAL
 
 #if defined(SABER_DOOKU)
 #define ORIENTATION ORIENTATION_USB_TOWARDS_BLADE
@@ -12,25 +13,35 @@
 #define CLASH_THRESHOLD_G 1.50
 #define FILTER_CUTOFF_FREQUENCY 75
 #define VOLUME 1800
+#define NUM_BLADES 2
 #elif defined(SABER_VADER)
 #define ORIENTATION ORIENTATION_USB_TOWARDS_BLADE
 #define AUDIO_CLASH_SUPPRESSION_LEVEL 3
 #define CLASH_THRESHOLD_G 1.0
 #define FILTER_CUTOFF_FREQUENCY 150
 #define VOLUME 1800
+#define NUM_BLADES 2
+#elif defined(SABER_VEEONE)
+#define ORIENTATION ORIENTATION_FETS_TOWARDS_BLADE
+#define AUDIO_CLASH_SUPPRESSION_LEVEL 3
+#define CLASH_THRESHOLD_G 1.0
+#define FILTER_CUTOFF_FREQUENCY 150
+#define VOLUME 1800
+#define NUM_BLADES 5
+#define SHARED_POWER_PINS
 #elif defined(SABER_CAL)
 #define ORIENTATION ORIENTATION_USB_TOWARDS_BLADE
 #define AUDIO_CLASH_SUPPRESSION_LEVEL 1.5
 #define CLASH_THRESHOLD_G 1.25
 #define FILTER_CUTOFF_FREQUENCY 75
 #define VOLUME 2500
+#define NUM_BLADES 2
 #endif
 
-#define NUM_BLADES 2
 #define NUM_BUTTONS 2
 #define BOOT_VOLUME 100
 
-const unsigned int maxLedsPerStrip = 128;
+const unsigned int maxLedsPerStrip = 144;
 
 #define ENABLE_AUDIO
 #define ENABLE_MOTION
@@ -78,9 +89,8 @@ const unsigned int maxLedsPerStrip = 128;
 //#define FETT263_SWING_ON
 //#define FETT263_SWING_OFF
 
-// 3 Minute motion timeout
-#define MOTION_TIMEOUT 60 * 3 * 1000
-#define IDLE_OFF_TIME 60 * 15 * 1000
+#define MOTION_TIMEOUT 60 * 1 * 1000
+#define IDLE_OFF_TIME 60 * 3 * 1000
 
 #define COLOR_CHANGE_DIRECT
 #define NO_REPEAT_RANDOM
@@ -103,6 +113,54 @@ const unsigned int maxLedsPerStrip = 128;
 #endif
 
 #ifdef CONFIG_PRESETS
+
+using BlinkyRedPreset = Layers<Red,InOutTrL<TrInstant,TrInstant,TransitionLoop<Black,TrConcat<TrDelay<3000>,Red,TrBoing<2000,5>>>>>;
+
+using BlinkyGreenPreset = Layers<Green,InOutTrL<TrInstant,TrInstant,TransitionLoop<Green,TrConcat<TrBoing<3000,9>,Black,TrDelay<2000>>>>>;
+//TOP CC
+/* copyright Fett263 KyloRen (Accent LED / PCB) OS6 Style
+https://fett263.com/fett263-proffieOS6-style-library.html#KyloRen
+OS6.7 v4.021
+Single Style
+Base Style: Kylo Ren Unstable (Film Based)
+
+Off Behavior: Slow Pulse Off-On
+
+Base Color: Rgb<0,0,255> (0)
+
+--Effects Included--
+Ignition Effect: Glitch On
+Retraction Effect: Cycle Down
+CoolDown Effect: Unstable Cool Down Reverse
+Lockup Effect: Lockup Flash
+LightningBlock Effect: Lightning After Effect
+Blast Effect: Blast Wave Up (Sound Based)
+Clash Effect: Real Clash V1 Up
+*/
+using CrystalChamberTopPreset = Layers<StaticFire<BrownNoiseFlicker<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RandomPerLEDFlicker<Mix<Int<3213>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,300>,Mix<Int<10280>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,0,6,10,1000,2>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<RetractionTime<5000>>,TrInstant>,Stripes<3000,3500,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>,RandomPerLEDFlicker<Mix<Int<7710>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,Black>,BrownNoiseFlicker<RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,200>,RandomPerLEDFlicker<Mix<Int<3137>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>>>,TrFade<800>>,EFFECT_RETRACTION>,TransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,255,255>>,Scale<WavLen<>,Int<100>,Int<400>>,Int<100>,Scale<WavLen<>,Int<100>,Int<400>>,Int<0>>,EFFECT_BLAST>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,TransitionEffectL<TrWaveX<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<100>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<0>>,EFFECT_CLASH>,AlphaL<White,Int<0>>>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,SmoothStep<ClashImpactF<>,Int<-4000>>>,TrFadeX<Scale<ClashImpactF<>,Int<100>,Int<300>>>>,EFFECT_LOCKUP_BEGIN>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,SmoothStep<ClashImpactF<>,Int<-4000>>>,TrFadeX<Scale<ClashImpactF<>,Int<100>,Int<300>>>>,EFFECT_LOCKUP_END>,LockupTrL<AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Int<0>>,TrInstant,TrConcat<TrInstant,Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrFade<1000>>,SaberBase::LOCKUP_LIGHTNING_BLOCK>,InOutTrL<TrConcat<TrJoin<TrDelayX<Mult<IgnitionTime<3000>,Int<16384>>>,TrWipeX<Mult<IgnitionTime<3000>,Int<16384>>>>,Mix<SmoothStep<NoisySoundLevel,Int<-1>>,Black,RgbArg<IGNITION_COLOR_ARG,Rgb<255,255,255>>>,TrWipeX<Mult<IgnitionTime<3000>,Int<16384>>>>,TrColorCycleX<RetractionTime<5000>>,Pulsing<Black,RgbArg<OFF_COLOR_ARG,Rgb<2,72,255>>,8000>>>;
+
+//BOTTOM CC
+
+/* copyright Fett263 KyloRen (Accent LED / PCB) OS6 Style
+https://fett263.com/fett263-proffieOS6-style-library.html#KyloRen
+OS6.7 v4.021
+Single Style
+Base Style: Kylo Ren Unstable (Film Based)
+
+Off Behavior: Slow Pulse Off-On
+
+Base Color: Rgb<0,0,255> (0)
+
+--Effects Included--
+Ignition Effect: Glitch On
+Retraction Effect: Cycle Down
+CoolDown Effect: Unstable Cool Down Reverse
+Lockup Effect: Lockup Flash
+LightningBlock Effect: Lightning After Effect
+Blast Effect: Blast Wave Up (Sound Based)
+Clash Effect: Real Clash V1 Up
+*/
+using CrystalChamberBottomPreset = Layers<StaticFire<BrownNoiseFlicker<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RandomPerLEDFlicker<Mix<Int<3213>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,300>,Mix<Int<10280>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,0,6,10,1000,2>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<RetractionTime<5000>>,TrInstant>,Stripes<3000,3500,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>,RandomPerLEDFlicker<Mix<Int<7710>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,Black>,BrownNoiseFlicker<RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,200>,RandomPerLEDFlicker<Mix<Int<3137>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>>>,TrFade<800>>,EFFECT_RETRACTION>,TransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,255,255>>,Scale<WavLen<>,Int<100>,Int<400>>,Int<100>,Scale<WavLen<>,Int<100>,Int<400>>,Int<0>>,EFFECT_BLAST>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,TransitionEffectL<TrWaveX<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<100>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<0>>,EFFECT_CLASH>,AlphaL<White,Int<0>>>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,SmoothStep<ClashImpactF<>,Int<-4000>>>,TrFadeX<Scale<ClashImpactF<>,Int<100>,Int<300>>>>,EFFECT_LOCKUP_BEGIN>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,SmoothStep<ClashImpactF<>,Int<-4000>>>,TrFadeX<Scale<ClashImpactF<>,Int<100>,Int<300>>>>,EFFECT_LOCKUP_END>,LockupTrL<AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Int<0>>,TrInstant,TrConcat<TrInstant,Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrFade<1000>>,SaberBase::LOCKUP_LIGHTNING_BLOCK>,InOutTrL<TrConcat<TrJoin<TrDelayX<Mult<IgnitionTime<3000>,Int<16384>>>,TrWipeX<Mult<IgnitionTime<3000>,Int<16384>>>>,Mix<SmoothStep<NoisySoundLevel,Int<-1>>,Black,RgbArg<IGNITION_COLOR_ARG,Rgb<255,255,255>>>,TrWipeX<Mult<IgnitionTime<3000>,Int<16384>>>>,TrColorCycleX<RetractionTime<5000>>,Pulsing<Black,RgbArg<OFF_COLOR_ARG,Rgb<2,72,255>>,8000>>>;
 
 /*--------------------------------- MainPresetFett263OriginalTrilogyFett263 -------------------------
 copyright Fett263 Rotoscope (Primary Blade) OS7 Style
@@ -644,54 +702,69 @@ const char *baseColorDooku3 = "65535,32,0";
 const char *baseColorMaul = "14386,110,0";
 const char *baseColorPalpatine3 = "44108,24,3";
 
+#ifdef SABER_VEEONE
+#define KEEGAN_PRESET(fontdirs, track, mainPreset, baseColor, editName) fontdirs, track, StylePtr<mainPreset>(baseColor), StylePtr<CrystalChamberTopPreset>(baseColor), StylePtr<CrystalChamberBottomPreset>(baseColor), StylePtr<BlinkyRedPreset>(), StylePtr<BlinkyGreenPreset>(), editName
+#else
+#define KEEGAN_PRESET(fontdirs, track, mainPreset, baseColor, editName) fontdirs, track, StylePtr<mainPreset>(baseColor), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColor), editName
+#endif
+
 Preset presets[] = {
-       // TODO Tracks probably don't make sense for father
-    {"FatherV2ANH;common", "tracks/track1.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorVaderAnh), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorVaderAnh), "FatherANH"},
-    {"FatherV2ESB;common", "tracks/track2.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorVaderEsb), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorVaderEsb), "FatherESB"},
-    {"FatherV2ROTJ;common", "tracks/track3.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorVaderRotj), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorVaderRotj), "FatherROTJ"},
-    {"FatherV2R1;common", "tracks/track4.wav", StylePtr<MainPresetFett263SequelsFett263>(baseColorVaderAnh), StylePtr<AccentPresetFett263SequelsFett263>(baseColorVaderAnh), "FatherR1"},
-    {"KSith_WhatRemains;common", "tracks/track1.wav", StylePtr<MainPresetFett263SequelsFett263>(baseColorVaderAnh), StylePtr<AccentPresetFett263SequelsFett263>(baseColorVaderAnh), "KSith_WhatRemains"},
-    {"KSith_CrimsonMenace;common", "tracks/Duel of the Fates.wav", StylePtr<MainPresetFett263SequelsFett263>(baseColorVaderAnh), StylePtr<AccentPresetFett263SequelsFett263>(baseColorVaderAnh), "KSith_CrimsonMenace"},
-    {"KSith_KRossguardTFA;common", "tracks/Kylo_Theme.wav", StylePtr<MainPresetFett263KyloRen>(baseColorVaderAnh), StylePtr<AccentPresetFett263KyloRen>(baseColorVaderAnh), "KSith_KRossguardTFA"},
-    {"KSith_KRossguardTLJ;common", "tracks/Kylo_Theme2.wav", StylePtr<MainPresetFett263KyloRen>(baseColorVaderAnh), StylePtr<AccentPresetFett263KyloRen>(baseColorVaderAnh), "KSith_KRossguardTLJ"},
-    {"KSith_KRossguardTROS;common", "tracks/Supreme_Leader_Kylo.wav", StylePtr<MainPresetFett263KyloRenSupremeLeader>(baseColorVaderAnh), StylePtr<AccentPresetFett263KyloRenSupremeLeader>(baseColorVaderAnh), "KSith_KRossguardTROS"},
+    // TODO Tracks probably don't make sense for father
+    {KEEGAN_PRESET("FatherV2ANH;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorVaderAnh, "FatherANH")},
+    {KEEGAN_PRESET("FatherV2ANH;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorVaderAnh, "FatherANH")},
+    {KEEGAN_PRESET("FatherV2ESB;common", "tracks/track2.wav", MainPresetFett263OriginalTrilogyFett263, baseColorVaderEsb, "FatherESB")},
+    {KEEGAN_PRESET("FatherV2ROTJ;common", "tracks/track3.wav", MainPresetFett263OriginalTrilogyFett263, baseColorVaderRotj, "FatherROTJ")},
+    {KEEGAN_PRESET("FatherV2R1;common", "tracks/track4.wav", MainPresetFett263SequelsFett263, baseColorVaderAnh, "FatherR1")},
+    {KEEGAN_PRESET("KSith_WhatRemains;common", "tracks/track1.wav", MainPresetFett263SequelsFett263, baseColorVaderAnh, "KSith_WhatRemains")},
+    {KEEGAN_PRESET("KSith_CrimsonMenace;common", "tracks/Duel of the Fates.wav", MainPresetFett263SequelsFett263, baseColorVaderAnh, "KSith_CrimsonMenace")},
+    {KEEGAN_PRESET("KSith_KRossguardTFA;common", "tracks/Kylo_Theme.wav", MainPresetFett263KyloRen, baseColorVaderAnh, "KSith_KRossguardTFA")},
+    {KEEGAN_PRESET("KSith_KRossguardTLJ;common", "tracks/Kylo_Theme2.wav", MainPresetFett263KyloRen, baseColorVaderAnh, "KSith_KRossguardTLJ")},
+    {KEEGAN_PRESET("KSith_KRossguardTROS;common", "tracks/Supreme_Leader_Kylo.wav", MainPresetFett263KyloRenSupremeLeader, baseColorVaderAnh, "KSith_KRossguardTROS")},
     // TODO Tracks probably don't make sense for OB4
-    {"OB4V2Rebels;common", "tracks/track1.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorObi3), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorObi3), "OB4V2Rebels"},
-    {"OB4V2Cantina;common", "tracks/track2.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorObiAnh), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorObiAnh), "OB4V2Cantina"},
-    {"OB4V2DeathStar;common", "tracks/track3.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorObiAnh), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorObiAnh), "OB4V2DeathStar"},
-    {"BMF;common", "tracks/track1.wav", StylePtr<MainPresetFett263SequelsFett263>(baseColorWindu), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorWindu), "BMF"},
-    {"ANH_Graflex;common", "tracks/track1.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorLukeAnh), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorLukeAnh), "ANH_GraflexV2"},
-    {"ANH_Training;common", "tracks/training_ambience.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorLukeAnh), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorLukeAnh), "ANH_TrainingV2"},
-    {"ESB_Graflex_V2;common", "tracks/track1.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorLukeDagobah), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorLukeDagobah), "ESB_Graflex_V2"},
-    {"The_Return_V2;common", "tracks/track1.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), "The_Return_V2"},
-    {"KSith_LS6CaveScene;common", "", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), "KSith_LS6CaveScene"},
-    {"KSith_LS6Classic;common", "", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), "KSith_LS6Classic"},
-    {"KSith_LS6OldVersion;common", "", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), "KSith_LS6OldVersion"},
-    {"KSith_Rescue;common", "tracks/Hallway_Long.wav", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorLukeRotj), "KSith_LS6OldVersion"},
-    {"Outcast_Knight;common", "", StylePtr<MainPresetFett263OriginalTrilogyFett263>(baseColorKatarn), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColorKatarn), "Outcast_Knight"},
-    {"Fire;common", "", StylePtr<ControlMainResponsiveFlameRealFlameGradientBaseColor>(), StylePtr<ControlMainResponsiveFlameRealFlameGradientBaseColor>(), "fire"},
-    {"Great_Mother_V2;common", "tracks/track1.wav", StylePtr<ControlMainBladeofTalzinBaseColor>(), StylePtr<ControlMainBladeofTalzinBaseColor>(), "morgan"},
-    {"SurvivorSingle;common", "", StylePtr<ControlMainCalKestisSurvivorBlueKyberSelectSpecialAbility>(), StylePtr<ControlMainCalKestisSurvivorBlueKyberSelectSpecialAbility>(), "SurvivorSingle"},
-    {"SurvivorCrossguard;common", "", StylePtr<ControlMainCalKestisSurvivorBlueKyberSelectSpecialAbility>(), StylePtr<ControlMainCalKestisSurvivorBlueKyberSelectSpecialAbility>(), "SurvivorCrossguard"},
-    {"KSith_TheChosenOneHero;common", "tracks/Battle of the Heroes.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorLukeAnh), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorLukeAnh), "KSith_TheChosenOneHero"},
-    {"KSith_TheChosenOneVillain;common", "tracks/Anakin's Turn.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorVaderAnh), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorVaderAnh), "KSith_TheChosenOneVillain"},
-    {"KSith_TheSenateTCW;common", "tracks/Palpy1.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorPalpatine3), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorPalpatine3), "KSith_TheSenateTCW"},
-    {"KSith_TheSenateROTS;common", "tracks/Order66.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorPalpatine3), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorPalpatine3), "KSith_TheSenateROTS"},
-    {"KSith_Savage;common", "tracks/track1.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorVaderAnh), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorVaderAnh), "KSith_Savage"},
-    {"KSith_CrimsonMenace;common", "tracks/mars.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorVaderAnh), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorVaderAnh), "KSith_CrimsonMenace"},
-    {"KSith_GrandMaster;common", "tracks/Track1_Dooku vs Yoda.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorYoda3), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorYoda3), "KSith_GrandMaster"},
-    {"The_Counts_Claw_V2AOTC;common", "tracks/track1.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorDooku3), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorDooku3), "The_Counts_Claw_V2AOTC"},
-    {"The_Counts_Claw_V2ROTS;common", "tracks/track2.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorDooku3), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorDooku3), "The_Counts_Claw_V2ROTS"},
-    {"KSith_TheBoldOne;common", "tracks/Anakin vs Obi.wav", StylePtr<MainPresetFett263PrequelsFett263>(baseColorObi3), StylePtr<AccentPresetFett263PrequelsFett263>(baseColorObi3), "KSith_TheBoldOne"},
-    {"GODZILLA;common", "", StylePtr<MountSaberFontsGodzilla>(), StylePtr<MountSaberFontsGodzilla>(), "GODZILLA"},
-    {"MECHAGODZILLA;common", "", StylePtr<MountSaberFontsMechagodzilla>(), StylePtr<MountSaberFontsMechagodzilla>(), "MECHAGODZILLA"},
-    {"JURASSIC;common", "", StylePtr<MountSaberFontsJurassic>(), StylePtr<MountSaberFontsJurassic>(), "JURASSIC"}
+    {KEEGAN_PRESET("OB4V2Rebels;common", "tracks/track1.wav", MainPresetFett263PrequelsFett263, baseColorObi3, "OB4V2Rebels")},
+    {KEEGAN_PRESET("OB4V2Cantina;common", "tracks/track2.wav", MainPresetFett263OriginalTrilogyFett263, baseColorObiAnh, "OB4V2Cantina")},
+    {KEEGAN_PRESET("OB4V2DeathStar;common", "tracks/track3.wav", MainPresetFett263OriginalTrilogyFett263, baseColorObiAnh, "OB4V2DeathStar")},
+    {KEEGAN_PRESET("BMF;common", "tracks/track1.wav", MainPresetFett263SequelsFett263, baseColorWindu, "BMF")},
+    {KEEGAN_PRESET("ANH_Graflex;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeAnh, "ANH_GraflexV2")},
+    {KEEGAN_PRESET("ANH_Training;common", "tracks/training_ambience.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeAnh, "ANH_TrainingV2")},
+    {KEEGAN_PRESET("ESB_Graflex_V2;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeDagobah, "ESB_Graflex_V2")},
+    {KEEGAN_PRESET("The_Return_V2;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "The_Return_V2")},
+    {KEEGAN_PRESET("KSith_LS6CaveScene;common", "", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "KSith_LS6CaveScene")},
+    {KEEGAN_PRESET("KSith_LS6Classic;common", "", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "KSith_LS6Classic")},
+    {KEEGAN_PRESET("KSith_LS6OldVersion;common", "", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "KSith_LS6OldVersion")},
+    {KEEGAN_PRESET("KSith_Rescue;common", "tracks/Hallway_Long.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "KSith_LS6OldVersion")},
+    {KEEGAN_PRESET("Outcast_Knight;common", "", MainPresetFett263OriginalTrilogyFett263, baseColorKatarn, "Outcast_Knight")},
+    {KEEGAN_PRESET("Fire;common", "", ControlMainResponsiveFlameRealFlameGradientBaseColor, "", "fire")},
+    {KEEGAN_PRESET("Great_Mother_V2;common", "tracks/track1.wav", ControlMainBladeofTalzinBaseColor,"", "morgan")},
+    {KEEGAN_PRESET("SurvivorSingle;common", "", ControlMainCalKestisSurvivorBlueKyberSelectSpecialAbility,"", "SurvivorSingle")},
+    {KEEGAN_PRESET("SurvivorCrossguard;common", "", ControlMainCalKestisSurvivorBlueKyberSelectSpecialAbility,"", "SurvivorCrossguard")},
+    {KEEGAN_PRESET("KSith_TheChosenOneHero;common", "tracks/Battle of the Heroes.wav", MainPresetFett263PrequelsFett263, baseColorLukeAnh, "KSith_TheChosenOneHero")},
+    {KEEGAN_PRESET("KSith_TheChosenOneVillain;common", "tracks/Anakin's Turn.wav", MainPresetFett263PrequelsFett263, baseColorVaderAnh, "KSith_TheChosenOneVillain")},
+    {KEEGAN_PRESET("KSith_TheSenateTCW;common", "tracks/Palpy1.wav", MainPresetFett263PrequelsFett263, baseColorPalpatine3, "KSith_TheSenateTCW")},
+    {KEEGAN_PRESET("KSith_TheSenateROTS;common", "tracks/Order66.wav", MainPresetFett263PrequelsFett263, baseColorPalpatine3, "KSith_TheSenateROTS")},
+    {KEEGAN_PRESET("KSith_Savage;common", "tracks/track1.wav", MainPresetFett263PrequelsFett263, baseColorVaderAnh, "KSith_Savage")},
+    {KEEGAN_PRESET("KSith_CrimsonMenace;common", "tracks/mars.wav", MainPresetFett263PrequelsFett263, baseColorVaderAnh, "KSith_CrimsonMenace")},
+    {KEEGAN_PRESET("KSith_GrandMaster;common", "tracks/Track1_Dooku vs Yoda.wav", MainPresetFett263PrequelsFett263, baseColorYoda3, "KSith_GrandMaster")},
+    {KEEGAN_PRESET("The_Counts_Claw_V2AOTC;common", "tracks/track1.wav", MainPresetFett263PrequelsFett263, baseColorDooku3, "The_Counts_Claw_V2AOTC")},
+    {KEEGAN_PRESET("The_Counts_Claw_V2ROTS;common", "tracks/track2.wav", MainPresetFett263PrequelsFett263, baseColorDooku3, "The_Counts_Claw_V2ROTS")},
+    {KEEGAN_PRESET("KSith_TheBoldOne;common", "tracks/Anakin vs Obi.wav", MainPresetFett263PrequelsFett263, baseColorObi3, "KSith_TheBoldOne")},
+    {KEEGAN_PRESET("GODZILLA;common", "", MountSaberFontsGodzilla, "", "GODZILLA")},
+    {KEEGAN_PRESET("MECHAGODZILLA;common", "", MountSaberFontsMechagodzilla, "", "MECHAGODZILLA")},
+    {KEEGAN_PRESET("JURASSIC;common", "", MountSaberFontsJurassic, "", "JURASSIC")}
 
 };
 
 BladeConfig blades[] = {
+#ifdef SABER_VEEONE
+    { 0, WS281XBladePtr<133, bladePin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3> >(),
+    WS281XBladePtr<1, blade4Pin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3> >(),
+    WS281XBladePtr<1, blade3Pin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3> >(),
+    SimpleBladePtr<CH1LED, NoLED, NoLED, NoLED, bladePowerPin7, -1, -1, -1>(),
+	SimpleBladePtr<CH2LED, NoLED, NoLED, NoLED, bladePowerPin8, -1, -1, -1>(),
+#else
     {0, WS281XBladePtr<128, bladePin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3>>(),
      WS281XBladePtr<30, blade2Pin, Color8::GRB, PowerPINS<bladePowerPin4, bladePowerPin5>>(),
+#endif
      CONFIGARRAY(presets)},
 };
 #endif
