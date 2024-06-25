@@ -23,11 +23,11 @@
 #define NUM_BLADES 2
 #elif defined(SABER_VEEONE)
 #define ORIENTATION ORIENTATION_FETS_TOWARDS_BLADE
-#define AUDIO_CLASH_SUPPRESSION_LEVEL 3
-#define CLASH_THRESHOLD_G 1.0
-#define FILTER_CUTOFF_FREQUENCY 150
+#define AUDIO_CLASH_SUPPRESSION_LEVEL 10
+#define CLASH_THRESHOLD_G 3.0
+#define FILTER_CUTOFF_FREQUENCY 75
 #define VOLUME 1800
-#define NUM_BLADES 5
+#define NUM_BLADES 4
 #define SHARED_POWER_PINS
 #elif defined(SABER_CAL)
 #define ORIENTATION ORIENTATION_USB_TOWARDS_BLADE
@@ -104,7 +104,6 @@ const unsigned int maxLedsPerStrip = 144;
 // // Max 9 characters
 // #define BLE_SHORTNAME "Saber"
 
-#define MOTION_TIMEOUT 60 * 3 * 800
 #endif
 
 #ifdef CONFIG_PROP
@@ -114,234 +113,92 @@ const unsigned int maxLedsPerStrip = 144;
 
 #ifdef CONFIG_PRESETS
 
+/*--------------------------------- StyleCombinedRotoscopeMain -------------------------
+copyright Fett263 Rotoscope (Primary Blade) OS7 Style
+https://fett263library.com/early-access/#Rotoscope
+OS7.14 v3.1
+This Style Contains 6 Unique Combinations
+Style Options:
+Default (0): Hyper Responsive Rotoscope (Original Trilogy)
+1: Hyper Responsive Rotoscope (Prequels)
+2: Hyper Responsive Rotoscope (Sequels)
+3: Audio Rotoscope - Single Color (Original Trilogy)
+4: Audio Rotoscope - Single Color (Prequels)
+5: Audio Rotoscope - Single Color (Sequels)
+
+
+--Effects Included--
+Ignition Effect: Standard Ignition [Color: IgnitionColorArg]
+Retraction Effect: Standard Retraction [Color: RetractionColorArg]
+Lockup Effect:
+0: mainLockMulti0Shape - Begin: Real Clash - Style: Intensity AudioFlicker - End: Full Blade Absorb
+[Color: LockupColorArg]
+Lightning Block Effect:
+0: mainLBMulti0Shape - Begin: Responsive Impact - Style: Strobing AudioFlicker - End: Full Blade Absorb
+[Color: LBColorArg]
+Drag Effect:
+0: mainDragMulti0Shape - Begin: Wipe In - Style: Intensity Sparking Drag - End: Wipe Out
+[Color: DragColorArg]
+Melt Effect:
+0: mainMeltMulti0Shape - Begin: Wipe In - Style: Intensity Melt - End: Wipe Out
+[Color: StabColorArg]
+Stab Effect: Sparking Stab [Color: StabColorArg]
+Interactive Blast: Continuing Blasts - Default Level (Uses Style Option 2 for Editing): 1000 ms
+Interactive Blast control requires blast.wav files in font. When Blast is triggered blast.wav will play, to deflect blast (blst.wav and visual effect) swing within 1000ms of blaster sound ending. Each deflection will be followed by new blaster sound, if no deflection blaster sound will end. Only one style per preset can contain.
+Blast Effect: Blast Wave (Random) [Color: BlastColorArg]
+Clash Effect: Real Clash V1 [Color: ClashColorArg]
+Battery Level: % Blade (Green to Red)
+Display Volume: % Blade [Color: BaseColorArg]
+*/
+using StyleCombinedRotoscopeMain = Layers<ColorSelect<IntArg<STYLE_OPTION_ARG,0>,TrInstant,Mix<HoldPeakF<SwingSpeed<250>,Scale<SwingAcceleration<100>,Int<50>,Int<500>>,Scale<SwingAcceleration<>,Int<20000>,Int<10000>>>,RandomFlicker<StripesX<Int<15000>,Scale<HoldPeakF<SwingSpeed<200>,Scale<SwingAcceleration<100>,Int<50>,Int<300>>,Scale<SwingAcceleration<100>,Int<24000>,Int<16000>>>,Int<-3200>,Int<-200>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<19276>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,Mix<HoldPeakF<SwingSpeed<250>,Scale<SwingAcceleration<100>,Int<50>,Int<500>>,Scale<SwingAcceleration<>,Int<20000>,Int<10000>>>,RandomFlicker<StripesX<Int<24000>,Scale<HoldPeakF<SwingSpeed<200>,Scale<SwingAcceleration<100>,Int<50>,Int<300>>,Scale<SwingAcceleration<100>,Int<24000>,Int<16000>>>,Int<-1400>,Int<-100>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<19276>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,Mix<HoldPeakF<SwingSpeed<250>,Scale<SwingAcceleration<100>,Int<50>,Int<500>>,Scale<SwingAcceleration<>,Int<20000>,Int<10000>>>,RandomFlicker<StripesX<Int<14000>,Scale<HoldPeakF<SwingSpeed<200>,Scale<SwingAcceleration<100>,Int<50>,Int<300>>,Scale<SwingAcceleration<100>,Int<24000>,Int<16000>>>,Int<-4000>,Int<-400>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<19276>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,AudioFlicker<Stripes<10000,-2600,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<16448>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,AudioFlicker<Stripes<24000,-1400,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<11565>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<16448>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,AudioFlicker<Stripes<14000,-4000,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<16448>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<WavLen<>>,TrWipeIn<200>>,AlphaL<RandomPerLEDFlickerL<RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>,SmoothStep<IntArg<MELT_SIZE_ARG,28000>,Int<2000>>>,TrWipe<200>>,EFFECT_STAB>,TransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,255,255>>,Scale<EffectRandomF<EFFECT_BLAST>,Int<100>,Int<400>>,Int<100>,Scale<EffectPosition<EFFECT_BLAST>,Int<100>,Int<400>>,Scale<EffectPosition<EFFECT_BLAST>,Int<28000>,Int<8000>>>,EFFECT_BLAST>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<12000>,Int<60000>>>>,TrFadeX<Scale<ClashImpactF<>,Int<200>,Int<400>>>>,EFFECT_CLASH>,TransitionEffectL<TrWaveX<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<100>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>>,EFFECT_CLASH>>,LockupTrL<TransitionEffect<AlphaL<AlphaMixL<Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<22000>>>,AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,BrownNoiseFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>,300>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<22000>>>>,AlphaL<AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<20000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<18000>>>>,TrExtend<5000,TrInstant>,TrFade<5000>,EFFECT_LOCKUP_BEGIN>,TrConcat<TrJoin<TrDelay<50>,TrInstant>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<20000>,Int<60000>>>>>,TrFade<300>>,TrConcat<TrInstant,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,SaberBase::LOCKUP_NORMAL,Int<1>>,ResponsiveLightningBlockL<Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrConcat<TrExtend<200,TrInstant>,AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Int<10000>,Int<21000>>,Int<10000>>>,TrFade<200>>,TrConcat<TrInstant,RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,Int<1>>,LockupTrL<AlphaL<TransitionEffect<RandomPerLEDFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>>,BrownNoiseFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>,Int<300>>,TrExtend<4000,TrInstant>,TrFade<4000>,EFFECT_DRAG_BEGIN>,SmoothStep<Scale<TwistAngle<>,IntArg<DRAG_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrWipeIn<200>,TrWipe<200>,SaberBase::LOCKUP_DRAG,Int<1>>,LockupTrL<AlphaL<Stripes<2000,4000,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,Mix<Sin<Int<50>>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,Mix<Int<4096>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrConcat<TrExtend<4000,TrWipeIn<200>>,AlphaL<HumpFlicker<Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,RotateColorsX<Int<3000>,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,100>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrFade<4000>>,TrWipe<200>,SaberBase::LOCKUP_MELT,Int<1>>,TransitionEffectL<TrConcat<TrDelay<100>,AlphaL<White,Int<0>>,TrDoEffect<TrInstant,EFFECT_GAME_CHOICE>>,EFFECT_INTERACTIVE_BLAST>,TransitionEffectL<TrConcat<TrExtendX<Sum<WavLen<EFFECT_INTERACTIVE_BLAST>,IntArg<STYLE_OPTION2_ARG,1000>>,TrInstant>,TransitionPulseL<TrDoEffect<TrInstant,EFFECT_GAME_RESPONSE1>,ThresholdPulseF<SwingSpeed<300>,Int<16000>>>,TrInstant>,EFFECT_GAME_CHOICE>,TransitionEffectL<TrConcat<TrDoEffect<TrExtendX<Sum<Scale<IsGreaterThan<WavLen<EFFECT_BLAST>,Int<400>>,Int<500>,WavLen<EFFECT_BLAST>>,Int<150>>,TrInstant>,EFFECT_BLAST>,AlphaL<White,Int<0>>,TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>>,EFFECT_GAME_RESPONSE1>,InOutTrL<TrWipeX<BendTimePowInvX<IgnitionTime<300>,Mult<IntArg<IGNITION_OPTION2_ARG,10992>,Int<98304>>>>,TrWipeInX<BendTimePowX<RetractionTime<0>,Mult<IntArg<RETRACTION_OPTION2_ARG,10992>,Int<98304>>>>,Black>,TransitionEffectL<TrConcat<TrJoin<TrDelay<2000>,TrWipe<1000>>,AlphaL<Mix<BatteryLevel,Red,Green>,SmoothStep<BatteryLevel,Int<-10>>>,TrWipeIn<1000>>,EFFECT_BATTERY_LEVEL>,TransitionEffectL<TrConcat<TrExtend<2000,TrWipe<100>>,AlphaL<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,SmoothStep<VolumeLevel,Int<-1>>>,TrFade<300>>,EFFECT_VOLUME_LEVEL>>;
+/*
+Add to preset as StylePtr<StyleCombinedRotoscopeMain>()
+--------------------------------------------------------------------------*/
+/*--------------------------------- StyleCombinedRotoscopeChamber -------------------------
+copyright Fett263 Rotoscope (Crystal Chamber) OS7 Style
+https://fett263library.com/early-access/#Rotoscope
+OS7.14 v3.1
+This Style Contains 6 Unique Combinations
+Style Options:
+Default (0): Hyper Responsive Rotoscope (Original Trilogy)
+1: Hyper Responsive Rotoscope (Prequels)
+2: Hyper Responsive Rotoscope (Sequels)
+3: Audio Rotoscope - Single Color (Original Trilogy)
+4: Audio Rotoscope - Single Color (Prequels)
+5: Audio Rotoscope - Single Color (Sequels)
+
+Off Behavior: Slow Run Reverse [Color: BaseColorArg]
+
+
+--Effects Included--
+Ignition Effect: Glitch On [Color: IgnitionColorArg]
+PowerUp Effect: Power Surge (Stable) [Color: IgnitionColorArg]
+Retraction Effect: Glitch Off [Color: RetractionColorArg]
+CoolDown Effect: Power Burst Forward [Color: RetractionColorArg]
+PostOff Effect: Disable [Color: PostOffColorArg]
+Lockup Effect:
+0: crystalLockMulti0Shape - Begin: Real Clash - Style: Intensity AudioFlicker - End: Full Blade Absorb
+[Color: LockupColorArg]
+Lightning Block Effect:
+0: crystalLBMulti0Shape - Begin: Responsive Impact - Style: Strobing AudioFlicker - End: Full Blade Absorb
+[Color: LBColorArg]
+Drag Effect:
+0: crystalDragMulti0Shape - Begin: Wipe In - Style: AudioFlicker - End: Wipe Out
+[Color: DragColorArg]
+Melt Effect:
+0: crystalMeltMulti0Shape - Begin: Wipe In - Style: Intensity Fire Melt - End: Wipe Out
+[Color: ClashColorArg]
+Blast Effect: Blast Wave Up (Sound Based) [Color: BlastColorArg]
+Clash Effect: Clash Ripple (Full Blade) [Color: ClashColorArg]
+Battery Level: Full Blade (Green to Red)
+*/
+using StyleCombinedRotoscopeChamber = Layers<ColorSelect<IntArg<STYLE_OPTION_ARG,0>,TrInstant,Mix<HoldPeakF<SwingSpeed<250>,Scale<SwingAcceleration<100>,Int<50>,Int<500>>,Scale<SwingAcceleration<>,Int<20000>,Int<10000>>>,RandomFlicker<StripesX<Int<15000>,Scale<HoldPeakF<SwingSpeed<200>,Scale<SwingAcceleration<100>,Int<50>,Int<300>>,Scale<SwingAcceleration<100>,Int<24000>,Int<16000>>>,Int<-3200>,Int<-200>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<19276>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,Mix<HoldPeakF<SwingSpeed<250>,Scale<SwingAcceleration<100>,Int<50>,Int<500>>,Scale<SwingAcceleration<>,Int<20000>,Int<10000>>>,RandomFlicker<StripesX<Int<24000>,Scale<HoldPeakF<SwingSpeed<200>,Scale<SwingAcceleration<100>,Int<50>,Int<300>>,Scale<SwingAcceleration<100>,Int<24000>,Int<16000>>>,Int<-1400>,Int<-100>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<19276>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,Mix<HoldPeakF<SwingSpeed<250>,Scale<SwingAcceleration<100>,Int<50>,Int<500>>,Scale<SwingAcceleration<>,Int<20000>,Int<10000>>>,RandomFlicker<StripesX<Int<14000>,Scale<HoldPeakF<SwingSpeed<200>,Scale<SwingAcceleration<100>,Int<50>,Int<300>>,Scale<SwingAcceleration<100>,Int<24000>,Int<16000>>>,Int<-4000>,Int<-400>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<19276>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,AudioFlicker<Stripes<10000,-2600,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<16448>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,AudioFlicker<Stripes<24000,-1400,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<11565>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<16448>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,AudioFlicker<Stripes<14000,-4000,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<16448>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,TransitionEffectL<TrConcat<TrInstant,AudioFlickerL<RgbArg<IGNITION_COLOR_ARG,Rgb<255,255,255>>>,TrFade<1200>>,EFFECT_IGNITION>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<RetractionTime<0>>,TrInstant>,Stripes<5000,-2500,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<7710>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>>,TrFade<800>>,EFFECT_RETRACTION>,TransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,255,255>>,Scale<WavLen<>,Int<100>,Int<400>>,Int<100>,Scale<WavLen<>,Int<100>,Int<400>>,Int<0>>,EFFECT_BLAST>,TransitionEffectL<TrConcat<TrJoin<TrDelay<30>,TrInstant>,Remap<CenterDistF<EffectPosition<EFFECT_CLASH>>,Stripes<2000,-2000,RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<2096>,Black,RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>>>>,TrFadeX<Scale<ClashImpactF<>,Int<200>,Int<400>>>>,EFFECT_CLASH>,LockupTrL<TransitionEffect<AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<20000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,TrExtend<5000,TrInstant>,TrFade<5000>,EFFECT_LOCKUP_BEGIN>,TrConcat<TrJoin<TrDelay<50>,TrInstant>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<20000>,Int<60000>>>>>,TrFade<300>>,TrConcat<TrInstant,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,SaberBase::LOCKUP_NORMAL,Int<1>>,LockupTrL<Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrConcat<TrExtend<200,TrInstant>,AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Int<10000>,Int<21000>>,Int<10000>>>,TrFade<200>>,TrConcat<TrInstant,RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,SaberBase::LOCKUP_LIGHTNING_BLOCK,Int<1>>,LockupTrL<AudioFlicker<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<8164>,Black,RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>>>,TrWipeIn<200>,TrWipe<200>,SaberBase::LOCKUP_DRAG,Int<1>>,LockupTrL<Layers<Stripes<2000,4000,RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Mix<Sin<Int<50>>,Black,RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>>,Mix<Int<4096>,Black,RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>>>,TransitionPulseL<TrConcat<TrExtend<4000,TrInstant>,Stripes<2000,3000,RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Mix<Sin<Int<30>>,Black,RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>>,Mix<Int<8192>,Black,RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>>>,TrFade<4000>>,LockupPulseF<SaberBase::LOCKUP_MELT>>>,TrWipeIn<200>,TrWipe<200>,SaberBase::LOCKUP_MELT,Int<1>>,InOutTrL<TrConcat<TrJoin<TrDelayX<Mult<IgnitionTime<0>,Int<16384>>>,TrWipeX<Mult<IgnitionTime<0>,Int<16384>>>>,Mix<SmoothStep<NoisySoundLevel,Int<-1>>,Black,RgbArg<IGNITION_COLOR_ARG,Rgb<255,255,255>>>,TrWipeX<Mult<IgnitionTime<0>,Int<16384>>>>,TrConcat<TrJoin<TrDelayX<Mult<RetractionTime<0>,Int<16384>>>,TrWipeInX<Mult<RetractionTime<0>,Int<16384>>>>,Mix<SmoothStep<NoisySoundLevel,Int<-1>>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,TrWipeInX<Mult<RetractionTime<0>,Int<16384>>>>,TransitionLoop<Black,TrConcat<TrWipeIn<1000>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,TrWipeIn<1000>>>>,TransitionEffectL<TrInstant,EFFECT_POSTOFF>,TransitionEffectL<TrConcat<TrJoin<TrDelay<2000>,TrInstant>,Mix<BatteryLevel,Red,Green>,TrFade<300>>,EFFECT_BATTERY_LEVEL>>;
+/*
+Add to preset as StylePtr<StyleCombinedRotoscopeChamber>()
+--------------------------------------------------------------------------*/
 using BlinkyRedPreset = Layers<Red,InOutTrL<TrInstant,TrInstant,TransitionLoop<Black,TrConcat<TrDelay<3000>,Red,TrBoing<2000,5>>>>>;
 
 using BlinkyGreenPreset = Layers<Green,InOutTrL<TrInstant,TrInstant,TransitionLoop<Green,TrConcat<TrBoing<3000,9>,Black,TrDelay<2000>>>>>;
-//TOP CC
-/* copyright Fett263 KyloRen (Accent LED / PCB) OS6 Style
-https://fett263.com/fett263-proffieOS6-style-library.html#KyloRen
-OS6.7 v4.021
-Single Style
-Base Style: Kylo Ren Unstable (Film Based)
-
-Off Behavior: Slow Pulse Off-On
-
-Base Color: Rgb<0,0,255> (0)
-
---Effects Included--
-Ignition Effect: Glitch On
-Retraction Effect: Cycle Down
-CoolDown Effect: Unstable Cool Down Reverse
-Lockup Effect: Lockup Flash
-LightningBlock Effect: Lightning After Effect
-Blast Effect: Blast Wave Up (Sound Based)
-Clash Effect: Real Clash V1 Up
-*/
-using CrystalChamberTopPreset = Layers<StaticFire<BrownNoiseFlicker<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RandomPerLEDFlicker<Mix<Int<3213>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,300>,Mix<Int<10280>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,0,6,10,1000,2>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<RetractionTime<5000>>,TrInstant>,Stripes<3000,3500,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>,RandomPerLEDFlicker<Mix<Int<7710>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,Black>,BrownNoiseFlicker<RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,200>,RandomPerLEDFlicker<Mix<Int<3137>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>>>,TrFade<800>>,EFFECT_RETRACTION>,TransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,255,255>>,Scale<WavLen<>,Int<100>,Int<400>>,Int<100>,Scale<WavLen<>,Int<100>,Int<400>>,Int<0>>,EFFECT_BLAST>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,TransitionEffectL<TrWaveX<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<100>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<0>>,EFFECT_CLASH>,AlphaL<White,Int<0>>>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,SmoothStep<ClashImpactF<>,Int<-4000>>>,TrFadeX<Scale<ClashImpactF<>,Int<100>,Int<300>>>>,EFFECT_LOCKUP_BEGIN>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,SmoothStep<ClashImpactF<>,Int<-4000>>>,TrFadeX<Scale<ClashImpactF<>,Int<100>,Int<300>>>>,EFFECT_LOCKUP_END>,LockupTrL<AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Int<0>>,TrInstant,TrConcat<TrInstant,Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrFade<1000>>,SaberBase::LOCKUP_LIGHTNING_BLOCK>,InOutTrL<TrConcat<TrJoin<TrDelayX<Mult<IgnitionTime<3000>,Int<16384>>>,TrWipeX<Mult<IgnitionTime<3000>,Int<16384>>>>,Mix<SmoothStep<NoisySoundLevel,Int<-1>>,Black,RgbArg<IGNITION_COLOR_ARG,Rgb<255,255,255>>>,TrWipeX<Mult<IgnitionTime<3000>,Int<16384>>>>,TrColorCycleX<RetractionTime<5000>>,Pulsing<Black,RgbArg<OFF_COLOR_ARG,Rgb<2,72,255>>,8000>>>;
-
-//BOTTOM CC
-
-/* copyright Fett263 KyloRen (Accent LED / PCB) OS6 Style
-https://fett263.com/fett263-proffieOS6-style-library.html#KyloRen
-OS6.7 v4.021
-Single Style
-Base Style: Kylo Ren Unstable (Film Based)
-
-Off Behavior: Slow Pulse Off-On
-
-Base Color: Rgb<0,0,255> (0)
-
---Effects Included--
-Ignition Effect: Glitch On
-Retraction Effect: Cycle Down
-CoolDown Effect: Unstable Cool Down Reverse
-Lockup Effect: Lockup Flash
-LightningBlock Effect: Lightning After Effect
-Blast Effect: Blast Wave Up (Sound Based)
-Clash Effect: Real Clash V1 Up
-*/
-using CrystalChamberBottomPreset = Layers<StaticFire<BrownNoiseFlicker<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RandomPerLEDFlicker<Mix<Int<3213>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,300>,Mix<Int<10280>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,0,6,10,1000,2>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<RetractionTime<5000>>,TrInstant>,Stripes<3000,3500,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>,RandomPerLEDFlicker<Mix<Int<7710>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,Black>,BrownNoiseFlicker<RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,200>,RandomPerLEDFlicker<Mix<Int<3137>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,255,255>>>>>,TrFade<800>>,EFFECT_RETRACTION>,TransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,255,255>>,Scale<WavLen<>,Int<100>,Int<400>>,Int<100>,Scale<WavLen<>,Int<100>,Int<400>>,Int<0>>,EFFECT_BLAST>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,TransitionEffectL<TrWaveX<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<100>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<0>>,EFFECT_CLASH>,AlphaL<White,Int<0>>>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,SmoothStep<ClashImpactF<>,Int<-4000>>>,TrFadeX<Scale<ClashImpactF<>,Int<100>,Int<300>>>>,EFFECT_LOCKUP_BEGIN>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,SmoothStep<ClashImpactF<>,Int<-4000>>>,TrFadeX<Scale<ClashImpactF<>,Int<100>,Int<300>>>>,EFFECT_LOCKUP_END>,LockupTrL<AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Int<0>>,TrInstant,TrConcat<TrInstant,Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrFade<1000>>,SaberBase::LOCKUP_LIGHTNING_BLOCK>,InOutTrL<TrConcat<TrJoin<TrDelayX<Mult<IgnitionTime<3000>,Int<16384>>>,TrWipeX<Mult<IgnitionTime<3000>,Int<16384>>>>,Mix<SmoothStep<NoisySoundLevel,Int<-1>>,Black,RgbArg<IGNITION_COLOR_ARG,Rgb<255,255,255>>>,TrWipeX<Mult<IgnitionTime<3000>,Int<16384>>>>,TrColorCycleX<RetractionTime<5000>>,Pulsing<Black,RgbArg<OFF_COLOR_ARG,Rgb<2,72,255>>,8000>>>;
-
-/*--------------------------------- MainPresetFett263OriginalTrilogyFett263 -------------------------
-copyright Fett263 Rotoscope (Primary Blade) OS7 Style
-https://fett263library.com/early-access/#Rotoscope
-OS7.14 v3.1
-Single Style
-Base Style: Audio Rotoscope - Single Color (Original Trilogy)
-
-
---Effects Included--
-Ignition Effect: Standard Ignition [Color: IgnitionColorArg]
-Retraction Effect: Standard Retraction [Color: RetractionColorArg]
-Lockup Effect:
-0: mainLockMulti0Shape - Begin: Real Clash - Style: Intensity AudioFlicker - End: Full Blade Absorb
-[Color: LockupColorArg]
-Lightning Block Effect:
-0: mainLBMulti0Shape - Begin: Responsive Impact - Style: Strobing AudioFlicker - End: Full Blade Absorb
-[Color: LBColorArg]
-Drag Effect:
-0: mainDragMulti0Shape - Begin: Wipe In - Style: Intensity Sparking Drag - End: Wipe Out
-[Color: DragColorArg]
-Melt Effect:
-0: mainMeltMulti0Shape - Begin: Wipe In - Style: Intensity Melt - End: Wipe Out
-[Color: StabColorArg]
-Stab Effect: AudioFlicker Stab [Color: StabColorArg]
-Interactive Blast: Random Blasts - Default Level (Uses Style Option 2 for Editing): 1000 ms
-Interactive Blast control requires blast.wav files in font. When Blast is triggered blast.wav will play, to deflect blast (blst.wav and visual effect) swing within 1000ms of blaster sound ending. Random number of blasts from 1 to multiple possible. Only one style per preset can contain.
-Blast Effect: Blast Wave (Random) [Color: BlastColorArg]
-Clash Effect: Real Clash V1 [Color: ClashColorArg]
-Battery Level: % Blade (Base Color)
-Display Volume: % Blade [Color: BaseColorArg]
-*/
-using MainPresetFett263OriginalTrilogyFett263 = Layers<AudioFlicker<Stripes<10000,-2600,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<16448>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<WavLen<>>,TrWipeIn<200>>,AlphaL<AudioFlickerL<RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>,SmoothStep<IntArg<MELT_SIZE_ARG,28000>,Int<2000>>>,TrWipe<200>>,EFFECT_STAB>,TransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,28,0>>,Scale<EffectRandomF<EFFECT_BLAST>,Int<100>,Int<400>>,Int<100>,Scale<EffectPosition<EFFECT_BLAST>,Int<100>,Int<400>>,Scale<EffectPosition<EFFECT_BLAST>,Int<28000>,Int<8000>>>,EFFECT_BLAST>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<12000>,Int<60000>>>>,TrFadeX<Scale<ClashImpactF<>,Int<200>,Int<400>>>>,EFFECT_CLASH>,TransitionEffectL<TrWaveX<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<100>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>>,EFFECT_CLASH>>,LockupTrL<TransitionEffect<AlphaL<AlphaMixL<Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<22000>>>,AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,BrownNoiseFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>,300>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<22000>>>>,AlphaL<AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<20000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<18000>>>>,TrExtend<5000,TrInstant>,TrFade<5000>,EFFECT_LOCKUP_BEGIN>,TrConcat<TrJoin<TrDelay<50>,TrInstant>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<20000>,Int<60000>>>>>,TrFade<300>>,TrConcat<TrInstant,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,SaberBase::LOCKUP_NORMAL,Int<1>>,ResponsiveLightningBlockL<Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrConcat<TrExtend<200,TrInstant>,AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Int<10000>,Int<21000>>,Int<10000>>>,TrFade<200>>,TrConcat<TrInstant,RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,Int<1>>,LockupTrL<AlphaL<TransitionEffect<RandomPerLEDFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>>,BrownNoiseFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>,Int<300>>,TrExtend<4000,TrInstant>,TrFade<4000>,EFFECT_DRAG_BEGIN>,SmoothStep<Scale<TwistAngle<>,IntArg<DRAG_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrWipeIn<200>,TrWipe<200>,SaberBase::LOCKUP_DRAG,Int<1>>,LockupTrL<AlphaL<Stripes<2000,4000,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,Mix<Sin<Int<50>>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,Mix<Int<4096>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrConcat<TrExtend<4000,TrWipeIn<200>>,AlphaL<HumpFlicker<Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,RotateColorsX<Int<3000>,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,100>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrFade<4000>>,TrWipe<200>,SaberBase::LOCKUP_MELT,Int<1>>,TransitionEffectL<TrConcat<TrDelay<100>,AlphaL<White,Int<0>>,TrDoEffect<TrInstant,EFFECT_GAME_CHOICE>>,EFFECT_INTERACTIVE_BLAST>,TransitionEffectL<TrConcat<TrExtendX<Sum<WavLen<EFFECT_INTERACTIVE_BLAST>,IntArg<STYLE_OPTION2_ARG,1000>>,TrInstant>,TransitionPulseL<TrDoEffect<TrInstant,EFFECT_BLAST>,ThresholdPulseF<SwingSpeed<300>,Int<16000>>>,TrConcat<TrDelay<150>,TrRandom<TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>,TrInstant,TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>,TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>>>>,EFFECT_GAME_CHOICE>,InOutTrL<TrWipeX<BendTimePowInvX<IgnitionTime<300>,Mult<IntArg<IGNITION_OPTION2_ARG,10992>,Int<98304>>>>,TrWipeInX<BendTimePowX<RetractionTime<0>,Mult<IntArg<RETRACTION_OPTION2_ARG,10992>,Int<98304>>>>,Black>,TransitionEffectL<TrConcat<TrJoin<TrDelay<2000>,TrWipe<1000>>,AlphaL<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,SmoothStep<BatteryLevel,Int<-10>>>,TrWipeIn<1000>>,EFFECT_BATTERY_LEVEL>,TransitionEffectL<TrConcat<TrExtend<2000,TrWipe<100>>,AlphaL<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,SmoothStep<VolumeLevel,Int<-1>>>,TrFade<300>>,EFFECT_VOLUME_LEVEL>>;
-/*
-Add to preset as StylePtr<MainPresetFett263OriginalTrilogyFett263>()
---------------------------------------------------------------------------*/
-
-/*--------------------------------- AccentPresetFett263OriginalTrilogyFett263 -------------------------
-copyright Fett263 Rotoscope (Accent LED / PCB) OS7 Style
-https://fett263library.com/early-access/#Rotoscope
-OS7.14 v3.1
-Single Style
-Base Style: Hyper Responsive Rotoscope (Original Trilogy)
-
-Off Behavior: Off [Color: OffColorArg]
-
-
---Effects Included--
-Ignition Effect: Instant [Color: IgnitionColorArg]
-Retraction Effect: Instant [Color: RetractionColorArg]
-Lockup Effect: NoneLightning Block Effect: NoneDrag Effect:
-0: accentDragMulti0Shape - Begin: Wipe In - Style: Intensity Sparking Drag - End: Wipe Out
-[Color: DragColorArg]
-Melt Effect:
-0: accentMeltMulti0Shape - Begin: Wipe In - Style: Intensity Melt - End: Wipe Out
-[Color: StabColorArg]
-*/
-using AccentPresetFett263OriginalTrilogyFett263 = Layers<Mix<HoldPeakF<SwingSpeed<250>,Scale<SwingAcceleration<100>,Int<50>,Int<500>>,Scale<SwingAcceleration<>,Int<20000>,Int<10000>>>,RandomFlicker<StripesX<Int<15000>,Scale<HoldPeakF<SwingSpeed<200>,Scale<SwingAcceleration<100>,Int<50>,Int<300>>,Scale<SwingAcceleration<100>,Int<24000>,Int<16000>>>,Int<-3200>,Int<-200>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<19276>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,LockupTrL<AlphaL<TransitionEffect<RandomPerLEDFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>>,BrownNoiseFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>,Int<300>>,TrExtend<4000,TrInstant>,TrFade<4000>,EFFECT_DRAG_BEGIN>,SmoothStep<Scale<TwistAngle<>,IntArg<DRAG_SIZE_ARG,31000>,Int<30000>>,Int<3000>>>,TrWipeIn<200>,TrWipe<200>,SaberBase::LOCKUP_DRAG,Int<1>>,LockupTrL<AlphaL<Stripes<2000,4000,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,Mix<Sin<Int<50>>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,Mix<Int<4096>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,26000>,Int<30000>>,Int<3000>>>,TrConcat<TrExtend<4000,TrWipeIn<200>>,AlphaL<HumpFlicker<Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,RotateColorsX<Int<3000>,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,100>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,26000>,Int<30000>>,Int<3000>>>,TrFade<4000>>,TrWipe<200>,SaberBase::LOCKUP_MELT,Int<1>>,InOutTrL<TrInstant,TrInstant,Black>>;
-/*
-Add to preset as StylePtr<AccentPresetFett263OriginalTrilogyFett263>()
---------------------------------------------------------------------------*/
-
-
-/*--------------------------------- MainPresetFett263PrequelsFett263 -------------------------
-copyright Fett263 Rotoscope (Primary Blade) OS7 Style
-https://fett263library.com/early-access/#Rotoscope
-OS7.14 v3.1
-Single Style
-Base Style: Audio Rotoscope - Single Color (Prequels)
-
-
---Effects Included--
-Ignition Effect: Standard Ignition [Color: IgnitionColorArg]
-Retraction Effect: Standard Retraction [Color: RetractionColorArg]
-Lockup Effect:
-0: mainLockMulti0Shape - Begin: Real Clash - Style: Intensity AudioFlicker - End: Full Blade Absorb
-[Color: LockupColorArg]
-Lightning Block Effect:
-0: mainLBMulti0Shape - Begin: Responsive Impact - Style: Strobing AudioFlicker - End: Full Blade Absorb
-[Color: LBColorArg]
-Drag Effect:
-0: mainDragMulti0Shape - Begin: Wipe In - Style: Intensity Sparking Drag - End: Wipe Out
-[Color: DragColorArg]
-Melt Effect:
-0: mainMeltMulti0Shape - Begin: Wipe In - Style: Intensity Melt - End: Wipe Out
-[Color: StabColorArg]
-Stab Effect: AudioFlicker Stab [Color: StabColorArg]
-Interactive Blast: Random Blasts - Default Level (Uses Style Option 2 for Editing): 1000 ms
-Interactive Blast control requires blast.wav files in font. When Blast is triggered blast.wav will play, to deflect blast (blst.wav and visual effect) swing within 1000ms of blaster sound ending. Random number of blasts from 1 to multiple possible. Only one style per preset can contain.
-Blast Effect: Blast Wave (Random) [Color: BlastColorArg]
-Clash Effect: Real Clash V1 [Color: ClashColorArg]
-Battery Level: % Blade (Base Color)
-Display Volume: % Blade [Color: BaseColorArg]
-*/
-using MainPresetFett263PrequelsFett263 = Layers<AudioFlicker<Stripes<24000,-1400,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<11565>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<16448>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<WavLen<>>,TrWipeIn<200>>,AlphaL<AudioFlickerL<RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>,SmoothStep<IntArg<MELT_SIZE_ARG,28000>,Int<2000>>>,TrWipe<200>>,EFFECT_STAB>,TransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,28,0>>,Scale<EffectRandomF<EFFECT_BLAST>,Int<100>,Int<400>>,Int<100>,Scale<EffectPosition<EFFECT_BLAST>,Int<100>,Int<400>>,Scale<EffectPosition<EFFECT_BLAST>,Int<28000>,Int<8000>>>,EFFECT_BLAST>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<12000>,Int<60000>>>>,TrFadeX<Scale<ClashImpactF<>,Int<200>,Int<400>>>>,EFFECT_CLASH>,TransitionEffectL<TrWaveX<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<100>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>>,EFFECT_CLASH>>,LockupTrL<TransitionEffect<AlphaL<AlphaMixL<Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<22000>>>,AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,BrownNoiseFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>,300>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<22000>>>>,AlphaL<AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<20000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<18000>>>>,TrExtend<5000,TrInstant>,TrFade<5000>,EFFECT_LOCKUP_BEGIN>,TrConcat<TrJoin<TrDelay<50>,TrInstant>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<20000>,Int<60000>>>>>,TrFade<300>>,TrConcat<TrInstant,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,SaberBase::LOCKUP_NORMAL,Int<1>>,ResponsiveLightningBlockL<Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrConcat<TrExtend<200,TrInstant>,AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Int<10000>,Int<21000>>,Int<10000>>>,TrFade<200>>,TrConcat<TrInstant,RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,Int<1>>,LockupTrL<AlphaL<TransitionEffect<RandomPerLEDFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>>,BrownNoiseFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>,Int<300>>,TrExtend<4000,TrInstant>,TrFade<4000>,EFFECT_DRAG_BEGIN>,SmoothStep<Scale<TwistAngle<>,IntArg<DRAG_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrWipeIn<200>,TrWipe<200>,SaberBase::LOCKUP_DRAG,Int<1>>,LockupTrL<AlphaL<Stripes<2000,4000,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,Mix<Sin<Int<50>>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,Mix<Int<4096>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrConcat<TrExtend<4000,TrWipeIn<200>>,AlphaL<HumpFlicker<Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,RotateColorsX<Int<3000>,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,100>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrFade<4000>>,TrWipe<200>,SaberBase::LOCKUP_MELT,Int<1>>,TransitionEffectL<TrConcat<TrDelay<100>,AlphaL<White,Int<0>>,TrDoEffect<TrInstant,EFFECT_GAME_CHOICE>>,EFFECT_INTERACTIVE_BLAST>,TransitionEffectL<TrConcat<TrExtendX<Sum<WavLen<EFFECT_INTERACTIVE_BLAST>,IntArg<STYLE_OPTION2_ARG,1000>>,TrInstant>,TransitionPulseL<TrDoEffect<TrInstant,EFFECT_BLAST>,ThresholdPulseF<SwingSpeed<300>,Int<16000>>>,TrConcat<TrDelay<150>,TrRandom<TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>,TrInstant,TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>,TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>>>>,EFFECT_GAME_CHOICE>,InOutTrL<TrWipeX<BendTimePowInvX<IgnitionTime<300>,Mult<IntArg<IGNITION_OPTION2_ARG,10992>,Int<98304>>>>,TrWipeInX<BendTimePowX<RetractionTime<0>,Mult<IntArg<RETRACTION_OPTION2_ARG,10992>,Int<98304>>>>,Black>,TransitionEffectL<TrConcat<TrJoin<TrDelay<2000>,TrWipe<1000>>,AlphaL<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,SmoothStep<BatteryLevel,Int<-10>>>,TrWipeIn<1000>>,EFFECT_BATTERY_LEVEL>,TransitionEffectL<TrConcat<TrExtend<2000,TrWipe<100>>,AlphaL<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,SmoothStep<VolumeLevel,Int<-1>>>,TrFade<300>>,EFFECT_VOLUME_LEVEL>>;
-/*
-Add to preset as StylePtr<MainPresetFett263PrequelsFett263>()
---------------------------------------------------------------------------*/
-
-/*--------------------------------- AccentPresetFett263PrequelsFett263 -------------------------
-copyright Fett263 Rotoscope (Accent LED / PCB) OS7 Style
-https://fett263library.com/early-access/#Rotoscope
-OS7.14 v3.1
-Single Style
-Base Style: Hyper Responsive Rotoscope (Prequels)
-
-Off Behavior: Off [Color: OffColorArg]
-
-
---Effects Included--
-Ignition Effect: Instant [Color: IgnitionColorArg]
-Retraction Effect: Instant [Color: RetractionColorArg]
-Lockup Effect: NoneLightning Block Effect: NoneDrag Effect:
-0: accentDragMulti0Shape - Begin: Wipe In - Style: Intensity Sparking Drag - End: Wipe Out
-[Color: DragColorArg]
-Melt Effect:
-0: accentMeltMulti0Shape - Begin: Wipe In - Style: Intensity Melt - End: Wipe Out
-[Color: StabColorArg]
-*/
-using AccentPresetFett263PrequelsFett263 = Layers<Mix<HoldPeakF<SwingSpeed<250>,Scale<SwingAcceleration<100>,Int<50>,Int<500>>,Scale<SwingAcceleration<>,Int<20000>,Int<10000>>>,RandomFlicker<StripesX<Int<24000>,Scale<HoldPeakF<SwingSpeed<200>,Scale<SwingAcceleration<100>,Int<50>,Int<300>>,Scale<SwingAcceleration<100>,Int<24000>,Int<16000>>>,Int<-1400>,Int<-100>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<19276>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,LockupTrL<AlphaL<TransitionEffect<RandomPerLEDFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>>,BrownNoiseFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>,Int<300>>,TrExtend<4000,TrInstant>,TrFade<4000>,EFFECT_DRAG_BEGIN>,SmoothStep<Scale<TwistAngle<>,IntArg<DRAG_SIZE_ARG,31000>,Int<30000>>,Int<3000>>>,TrWipeIn<200>,TrWipe<200>,SaberBase::LOCKUP_DRAG,Int<1>>,LockupTrL<AlphaL<Stripes<2000,4000,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,Mix<Sin<Int<50>>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,Mix<Int<4096>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,26000>,Int<30000>>,Int<3000>>>,TrConcat<TrExtend<4000,TrWipeIn<200>>,AlphaL<HumpFlicker<Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,RotateColorsX<Int<3000>,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,100>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,26000>,Int<30000>>,Int<3000>>>,TrFade<4000>>,TrWipe<200>,SaberBase::LOCKUP_MELT,Int<1>>,InOutTrL<TrInstant,TrInstant,Black>>;
-/*
-Add to preset as StylePtr<AccentPresetFett263PrequelsFett263>()
---------------------------------------------------------------------------*/
-
-/*--------------------------------- MainPresetFett263SequelsFett263 -------------------------
-copyright Fett263 Rotoscope (Primary Blade) OS7 Style
-https://fett263library.com/early-access/#Rotoscope
-OS7.14 v3.1
-Single Style
-Base Style: Audio Rotoscope - Single Color (Sequels)
-
-
---Effects Included--
-Ignition Effect: Standard Ignition [Color: IgnitionColorArg]
-Retraction Effect: Standard Retraction [Color: RetractionColorArg]
-Lockup Effect:
-0: mainLockMulti0Shape - Begin: Real Clash - Style: Intensity AudioFlicker - End: Full Blade Absorb
-[Color: LockupColorArg]
-Lightning Block Effect:
-0: mainLBMulti0Shape - Begin: Responsive Impact - Style: Strobing AudioFlicker - End: Full Blade Absorb
-[Color: LBColorArg]
-Drag Effect:
-0: mainDragMulti0Shape - Begin: Wipe In - Style: Intensity Sparking Drag - End: Wipe Out
-[Color: DragColorArg]
-Melt Effect:
-0: mainMeltMulti0Shape - Begin: Wipe In - Style: Intensity Melt - End: Wipe Out
-[Color: StabColorArg]
-Stab Effect: AudioFlicker Stab [Color: StabColorArg]
-Interactive Blast: Random Blasts - Default Level (Uses Style Option 2 for Editing): 1000 ms
-Interactive Blast control requires blast.wav files in font. When Blast is triggered blast.wav will play, to deflect blast (blst.wav and visual effect) swing within 1000ms of blaster sound ending. Random number of blasts from 1 to multiple possible. Only one style per preset can contain.
-Blast Effect: Blast Wave (Random) [Color: BlastColorArg]
-Clash Effect: Real Clash V1 [Color: ClashColorArg]
-Battery Level: % Blade (Base Color)
-Display Volume: % Blade [Color: BaseColorArg]
-*/
-using MainPresetFett263SequelsFett263 = Layers<AudioFlicker<Stripes<14000,-4000,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<16448>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<WavLen<>>,TrWipeIn<200>>,AlphaL<AudioFlickerL<RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>,SmoothStep<IntArg<MELT_SIZE_ARG,28000>,Int<2000>>>,TrWipe<200>>,EFFECT_STAB>,TransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,28,0>>,Scale<EffectRandomF<EFFECT_BLAST>,Int<100>,Int<400>>,Int<100>,Scale<EffectPosition<EFFECT_BLAST>,Int<100>,Int<400>>,Scale<EffectPosition<EFFECT_BLAST>,Int<28000>,Int<8000>>>,EFFECT_BLAST>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<12000>,Int<60000>>>>,TrFadeX<Scale<ClashImpactF<>,Int<200>,Int<400>>>>,EFFECT_CLASH>,TransitionEffectL<TrWaveX<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<100>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>>,EFFECT_CLASH>>,LockupTrL<TransitionEffect<AlphaL<AlphaMixL<Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<22000>>>,AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,BrownNoiseFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>,300>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<22000>>>>,AlphaL<AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<20000>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<18000>>>>,TrExtend<5000,TrInstant>,TrFade<5000>,EFFECT_LOCKUP_BEGIN>,TrConcat<TrJoin<TrDelay<50>,TrInstant>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<20000>,Int<60000>>>>>,TrFade<300>>,TrConcat<TrInstant,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,SaberBase::LOCKUP_NORMAL,Int<1>>,ResponsiveLightningBlockL<Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrConcat<TrExtend<200,TrInstant>,AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Int<10000>,Int<21000>>,Int<10000>>>,TrFade<200>>,TrConcat<TrInstant,RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,Int<1>>,LockupTrL<AlphaL<TransitionEffect<RandomPerLEDFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>>,BrownNoiseFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>,Int<300>>,TrExtend<4000,TrInstant>,TrFade<4000>,EFFECT_DRAG_BEGIN>,SmoothStep<Scale<TwistAngle<>,IntArg<DRAG_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrWipeIn<200>,TrWipe<200>,SaberBase::LOCKUP_DRAG,Int<1>>,LockupTrL<AlphaL<Stripes<2000,4000,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,Mix<Sin<Int<50>>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,Mix<Int<4096>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrConcat<TrExtend<4000,TrWipeIn<200>>,AlphaL<HumpFlicker<Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,RotateColorsX<Int<3000>,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,100>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,28000>,Int<30000>>,Int<3000>>>,TrFade<4000>>,TrWipe<200>,SaberBase::LOCKUP_MELT,Int<1>>,TransitionEffectL<TrConcat<TrDelay<100>,AlphaL<White,Int<0>>,TrDoEffect<TrInstant,EFFECT_GAME_CHOICE>>,EFFECT_INTERACTIVE_BLAST>,TransitionEffectL<TrConcat<TrExtendX<Sum<WavLen<EFFECT_INTERACTIVE_BLAST>,IntArg<STYLE_OPTION2_ARG,1000>>,TrInstant>,TransitionPulseL<TrDoEffect<TrInstant,EFFECT_BLAST>,ThresholdPulseF<SwingSpeed<300>,Int<16000>>>,TrConcat<TrDelay<150>,TrRandom<TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>,TrInstant,TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>,TrDoEffect<TrInstant,EFFECT_INTERACTIVE_BLAST>>>>,EFFECT_GAME_CHOICE>,InOutTrL<TrWipeX<BendTimePowInvX<IgnitionTime<300>,Mult<IntArg<IGNITION_OPTION2_ARG,10992>,Int<98304>>>>,TrWipeInX<BendTimePowX<RetractionTime<0>,Mult<IntArg<RETRACTION_OPTION2_ARG,10992>,Int<98304>>>>,Black>,TransitionEffectL<TrConcat<TrJoin<TrDelay<2000>,TrWipe<1000>>,AlphaL<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,SmoothStep<BatteryLevel,Int<-10>>>,TrWipeIn<1000>>,EFFECT_BATTERY_LEVEL>,TransitionEffectL<TrConcat<TrExtend<2000,TrWipe<100>>,AlphaL<RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,SmoothStep<VolumeLevel,Int<-1>>>,TrFade<300>>,EFFECT_VOLUME_LEVEL>>;
-/*
-Add to preset as StylePtr<MainPresetFett263SequelsFett263>()
---------------------------------------------------------------------------*/
-
-/*--------------------------------- AccentPresetFett263SequelsFett263 -------------------------
-copyright Fett263 Rotoscope (Accent LED / PCB) OS7 Style
-https://fett263library.com/early-access/#Rotoscope
-OS7.14 v3.1
-Single Style
-Base Style: Hyper Responsive Rotoscope (Sequels)
-
-Off Behavior: Off [Color: OffColorArg]
-
-
---Effects Included--
-Ignition Effect: Instant [Color: IgnitionColorArg]
-Retraction Effect: Instant [Color: RetractionColorArg]
-Lockup Effect: NoneLightning Block Effect: NoneDrag Effect:
-0: accentDragMulti0Shape - Begin: Wipe In - Style: Intensity Sparking Drag - End: Wipe Out
-[Color: DragColorArg]
-Melt Effect:
-0: accentMeltMulti0Shape - Begin: Wipe In - Style: Intensity Melt - End: Wipe Out
-[Color: StabColorArg]
-*/
-using AccentPresetFett263SequelsFett263 = Layers<Mix<HoldPeakF<SwingSpeed<250>,Scale<SwingAcceleration<100>,Int<50>,Int<500>>,Scale<SwingAcceleration<>,Int<20000>,Int<10000>>>,RandomFlicker<StripesX<Int<14000>,Scale<HoldPeakF<SwingSpeed<200>,Scale<SwingAcceleration<100>,Int<50>,Int<300>>,Scale<SwingAcceleration<100>,Int<24000>,Int<16000>>>,Int<-4000>,Int<-400>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>,Mix<Int<19276>,Black,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,RgbArg<BASE_COLOR_ARG,Rgb<0,0,255>>>,LockupTrL<AlphaL<TransitionEffect<RandomPerLEDFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>>,BrownNoiseFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>,Int<300>>,TrExtend<4000,TrInstant>,TrFade<4000>,EFFECT_DRAG_BEGIN>,SmoothStep<Scale<TwistAngle<>,IntArg<DRAG_SIZE_ARG,31000>,Int<30000>>,Int<3000>>>,TrWipeIn<200>,TrWipe<200>,SaberBase::LOCKUP_DRAG,Int<1>>,LockupTrL<AlphaL<Stripes<2000,4000,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,Mix<Sin<Int<50>>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,Mix<Int<4096>,Black,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,26000>,Int<30000>>,Int<3000>>>,TrConcat<TrExtend<4000,TrWipeIn<200>>,AlphaL<HumpFlicker<Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>,RotateColorsX<Int<3000>,Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,68,0>>>>>,100>,SmoothStep<Scale<TwistAngle<>,IntArg<MELT_SIZE_ARG,26000>,Int<30000>>,Int<3000>>>,TrFade<4000>>,TrWipe<200>,SaberBase::LOCKUP_MELT,Int<1>>,InOutTrL<TrInstant,TrInstant,Black>>;
 /*
 Add to preset as StylePtr<AccentPresetFett263SequelsFett263>()
 --------------------------------------------------------------------------*/
@@ -657,108 +514,271 @@ Emitter Effect: Unstable Flare
 using MountSaberFontsMechagodzilla = Layers<ColorSelect<IntArg<STYLE_OPTION_ARG,0>,TrInstant,Stripes<3000,-3500,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>,RandomPerLEDFlicker<Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,Black>,BrownNoiseFlicker<RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>,Mix<Int<3855>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,200>,RandomPerLEDFlicker<Mix<Int<10280>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,Mix<Int<3855>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>>>,StripesX<Int<6000>,Scale<SlowNoise<Int<2000>>,Int<-1600>,Int<-3200>>,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>,RandomPerLEDFlicker<Mix<Int<10280>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,Mix<Int<1285>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>>,BrownNoiseFlicker<Mix<Int<1285>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,Mix<Int<16384>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,300>,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>,RandomPerLEDFlicker<Black,Mix<Int<16384>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>>,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,Layers<Stripes<2000,-2500,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>,RandomPerLEDFlicker<Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,Black>,BrownNoiseFlicker<RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>,Mix<Int<3855>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,200>,RandomPerLEDFlicker<Mix<Int<10280>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,Mix<Int<3855>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>>>,TransitionLoopL<TrJoin<TrDelayX<Scale<SlowNoise<Int<1500>>,Int<200>,Int<1200>>>,TrWaveX<RandomFlicker<RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>,BrownNoiseFlicker<Mix<Int<10280>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,Black,300>>,Int<400>,Int<100>,Int<200>,Int<0>>>>>,StaticFire<StripesX<Int<3000>,Scale<SlowNoise<Int<2000>>,Int<-1000>,Int<-5000>>,BrownNoiseFlicker<RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>,Black,100>,RandomPerLEDFlicker<Mix<Int<7710>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,Mix<Int<1285>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>>,Mix<Int<3212>,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>,White>,Mix<Int<16384>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>>,Mix<Int<10280>,Black,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,0,5,3,3000,0>>,AlphaL<RandomPerLEDFlickerL<RgbArg<EMITTER_COLOR_ARG,Rgb<255,14,0>>>,SmoothStep<Scale<NoisySoundLevel,IntArg<EMITTER_SIZE_ARG,2000>,Sum<IntArg<EMITTER_SIZE_ARG,2000>,Int<6000>>>,Int<-6000>>>,TransitionEffectL<TrConcat<TrJoin<TrDelay<1000>,TrFade<300>>,AudioFlickerL<RgbArg<SWING_COLOR_ARG,Rgb<255,255,255>>>,TrFade<300>>,EFFECT_FORCE>,TransitionEffectL<TrConcat<TrInstant,HumpFlickerL<RgbArg<IGNITION_COLOR_ARG,Rgb<255,255,255>>,40>,TrFade<1200>>,EFFECT_IGNITION>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<RetractionTime<0>>,TrInstant>,Stripes<3000,3500,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,14,0>>,RandomPerLEDFlicker<Mix<Int<7710>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,14,0>>>,Black>,BrownNoiseFlicker<RgbArg<RETRACTION_COLOR_ARG,Rgb<255,14,0>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,14,0>>>,200>,RandomPerLEDFlicker<Mix<Int<3137>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,14,0>>>,Mix<Int<3855>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,14,0>>>>>,TrFade<800>>,EFFECT_RETRACTION>,TransitionEffectL<TrConcat<TrJoin<TrDelayX<WavLen<>>,TrWipeIn<200>>,AlphaL<AudioFlickerL<RgbArg<STAB_COLOR_ARG,Rgb<255,255,255>>>,SmoothStep<IntArg<MELT_SIZE_ARG,28000>,Int<2000>>>,TrWipe<200>>,EFFECT_STAB>,MultiTransitionEffectL<TrWaveX<RgbArg<BLAST_COLOR_ARG,Rgb<255,255,255>>,Scale<EffectPosition<EFFECT_BLAST>,Int<100>,Int<400>>,Int<100>,Scale<EffectPosition<EFFECT_BLAST>,Int<100>,Int<400>>,Scale<EffectPosition<EFFECT_BLAST>,Int<28000>,Int<8000>>>,EFFECT_BLAST>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,TransitionEffectL<TrConcat<TrInstant,AlphaL<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<12000>,Int<60000>>>>,TrFadeX<Scale<ClashImpactF<>,Int<200>,Int<400>>>>,EFFECT_CLASH>,TransitionEffectL<TrWaveX<RgbArg<CLASH_COLOR_ARG,Rgb<255,255,255>>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Int<100>,Scale<ClashImpactF<>,Int<100>,Int<400>>,Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>>,EFFECT_CLASH>>,LockupTrL<TransitionEffect<AlphaMixL<Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<SwingSpeed<100>,Int<14000>,Int<18000>>>,BrownNoiseFlickerL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Int<200>>,StripesX<Int<1800>,Scale<NoisySoundLevel,Int<-3500>,Int<-5000>>,Mix<Int<6425>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<12850>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>>,AlphaL<AudioFlicker<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Mix<Int<10280>,Black,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Int<13000>>>,TrJoin<TrDelay<8000>,TrInstant>,TrFade<3000>,EFFECT_LOCKUP_BEGIN>,TrConcat<TrJoin<TrDelay<50>,TrInstant>,Mix<IsLessThan<ClashImpactF<>,Int<26000>>,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,AlphaL<RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,Bump<Scale<BladeAngle<>,Scale<BladeAngle<0,16000>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-12000>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<10000>>>,Sum<IntArg<LOCKUP_POSITION_ARG,16000>,Int<-10000>>>,Scale<ClashImpactF<>,Int<20000>,Int<60000>>>>>,TrFade<300>>,TrConcat<TrInstant,RgbArg<LOCKUP_COLOR_ARG,Rgb<255,255,255>>,TrFade<400>>,SaberBase::LOCKUP_NORMAL>,ResponsiveLightningBlockL<Strobe<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,AudioFlicker<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Blue>,50,1>,TrConcat<TrInstant,AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Bump<Int<12000>,Int<18000>>>,TrFade<200>>,TrConcat<TrInstant,HumpFlickerL<AlphaL<RgbArg<LB_COLOR_ARG,Rgb<255,255,255>>,Int<16000>>,30>,TrSmoothFade<600>>>,LockupTrL<AlphaL<RandomPerLEDFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>>,SmoothStep<IntArg<DRAG_SIZE_ARG,28000>,Int<3000>>>,TrConcat<TrJoin<TrDelay<4000>,TrWipeIn<200>>,AlphaL<BrownNoiseFlickerL<RgbArg<DRAG_COLOR_ARG,Rgb<255,255,255>>,Int<300>>,SmoothStep<IntArg<DRAG_SIZE_ARG,28000>,Int<3000>>>,TrFade<4000>>,TrFade<300>,SaberBase::LOCKUP_DRAG>,LockupTrL<AlphaL<Remap<Scale<RampF,Int<65536>,Int<0>>,StaticFire<Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,24,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,24,0>>>>,Mix<TwistAngle<>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,24,0>>>,RotateColorsX<Int<3000>,Mix<Int<12000>,Black,RgbArg<STAB_COLOR_ARG,Rgb<255,24,0>>>>>,0,3,5,3000,10>>,SmoothStep<IntArg<MELT_SIZE_ARG,28000>,Int<4000>>>,TrConcat<TrWipeIn<100>,AlphaL<RgbArg<STAB_COLOR_ARG,Rgb<255,24,0>>,SmoothStep<IntArg<MELT_SIZE_ARG,28000>,Int<4000>>>,TrJoin<TrDelay<4000>,TrFade<300>>,AlphaL<Mix<TwistAngle<>,RgbArg<STAB_COLOR_ARG,Rgb<255,24,0>>,RotateColorsX<Int<3000>,RgbArg<STAB_COLOR_ARG,Rgb<255,24,0>>>>,SmoothStep<IntArg<MELT_SIZE_ARG,28000>,Int<4000>>>,TrFade<4000>>,TrWipe<200>,SaberBase::LOCKUP_MELT>,InOutTrL<TrWipeSparkTipX<RgbArg<IGNITION_COLOR_ARG,Rgb<255,255,255>>,IgnitionTime<300>>,TrConcat<TrJoin<TrDelayX<Mult<RetractionTime<0>,Int<16384>>>,TrWipeInX<Mult<RetractionTime<0>,Int<16384>>>>,Mix<SmoothStep<NoisySoundLevel,Int<-1>>,Black,RgbArg<RETRACTION_COLOR_ARG,Rgb<255,14,0>>>,TrWipeInX<Mult<RetractionTime<0>,Int<16384>>>>,Black>,TransitionEffectL<TrConcat<TrInstant,AlphaL<Mix<Trigger<EFFECT_PREON,Mult<Int<16384>,WavLen<EFFECT_PREON>>,Mult<Int<10922>,WavLen<EFFECT_PREON>>,Mult<Int<5462>,WavLen<EFFECT_PREON>>>,BrownNoiseFlicker<Black,RgbArg<PREON_COLOR_ARG,Rgb<255,14,0>>,100>,RandomPerLEDFlicker<RgbArg<PREON_COLOR_ARG,Rgb<255,14,0>>,Rgb<50,50,50>>,BrownNoiseFlicker<Mix<NoisySoundLevel,RgbArg<PREON_COLOR_ARG,Rgb<255,14,0>>,RotateColorsX<Int<4000>,RgbArg<PREON_COLOR_ARG,Rgb<255,14,0>>>>,White,50>>,SmoothStep<Scale<NoisySoundLevel,Int<-10000>,Int<36000>>,Int<-4000>>>,TrDelayX<WavLen<EFFECT_PREON>>>,EFFECT_PREON>,TransitionEffectL<TrConcat<TrCenterWipeX<Int<200>>,AlphaL<AudioFlicker<RotateColorsX<Int<200>,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,RotateColorsX<Int<600>,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>>,Bump<Int<16384>,Scale<NoisySoundLevel,Int<14000>,Int<20000>>>>,TrJoin<TrDelayX<Mult<Scale<IsLessThan<WavLen<EFFECT_POSTOFF>,Int<200>>,WavLen<EFFECT_POSTOFF>,Int<4000>>,Int<16384>>>,TrCenterWipeX<Mult<Scale<IsLessThan<WavLen<EFFECT_POSTOFF>,Int<200>>,WavLen<EFFECT_POSTOFF>,Int<4000>>,Int<8000>>>>,Layers<AlphaL<AudioFlicker<RotateColorsX<Int<200>,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>,RotateColorsX<Int<600>,RgbArg<BASE_COLOR_ARG,Rgb<255,0,0>>>>,Bump<Int<16384>,Scale<NoisySoundLevel,Int<14000>,Int<20000>>>>,AlphaL<Black,LinearSectionF<Int<16384>,Scale<NoisySoundLevel,Int<4000>,Int<8000>>>>>,TrFadeX<Mult<Scale<IsLessThan<WavLen<EFFECT_POSTOFF>,Int<200>>,WavLen<EFFECT_POSTOFF>,Int<4000>>,Int<10000>>>>,EFFECT_POSTOFF>>;
 
 
-// def getString16(red, green, blue):
-//     def convertrgb16(val):
-//         return int(pow(val/255, 2.2)*65535)
-//     return str(convertrgb16(red)) + "," + str(convertrgb16(green)) +  "," + str(convertrgb16(blue))
-// 
-// baseColorValues = {
-//     'Anakin3': (15, 55, 255),
-//     'VaderAnh': (183,12,3),
-//     'VaderEsb': (255, 0, 0),
-//     'VaderRotj': (255, 0, 0),
-//     'VaderRotj': (255, 0, 0),
-//     'Obi3': (3,15,255),
-//     'ObiAnh': (8,75,235),
-//     'LukeAnh': (78,171,235),
-//     'LukeDagobah': (49, 134, 229),
-//     'LukeBespin': (37, 105, 255),
-//     'LukeRotj': (0, 255, 0),
-//     'Katarn': (2, 72, 255),
-//     'Windu': (173,13,255),
-//     'Yoda3': (14,237,5),
-//     'Dooku3': (255,8,0),
-//     'Palpatine3': (213,7,3),
-// }
+/* def getString16(red, green, blue):
+    def convertrgb16(val):
+        return int(pow(val/255, 2.2)*65535)
+    return str(convertrgb16(red)) + "," + str(convertrgb16(green)) +  "," + str(convertrgb16(blue))
 
-// for key,val in baseColorValues.items():
-//    print("const char *baseColor{} = \"{}\";".format(key, getString16(val[0], val[1], val[2])))
+baseColorValues = {
+    'Anakin3': (15, 55, 255),
+    'VaderAnh': (255,16,4),
+    'VaderEsb': (255, 0, 0),
+    'VaderRotj': (255, 0, 0),
+    'VaderRotj': (255, 0, 0),
+    'Obi3': (3,15,255),
+    'ObiAnh': (8,75,235),
+    'LukeAnh': (78,171,235),
+    'LukeDagobah': (49, 134, 229),
+    'LukeBespin': (37, 105, 255),
+    'LukeRotj': (0, 255, 0),
+    'Katarn': (2, 72, 255),
+    'Windu': (173,13,255),
+    'Yoda3': (14,237,5),
+    'Dooku3': (255,8,0),
+    'Palpatine3': (213,7,3),
+}
 
-const char *baseColorAnakin3 = "128,2243,65535";
-const char *baseColorVaderAnh = "31584,78,3";
-const char *baseColorVaderEsb = "65535,0,0";
-const char *baseColorVaderRotj = "65535,0,0";
-const char *baseColorObi1 = "0,395,65535";
-const char *baseColorObi3 = "3,128,65535";
-const char *baseColorObiAnh = "32,4438,54756";
-const char *baseColorLukeAnh = "4838,27206,54756";
-const char *baseColorLukeDagobah = "1739,15911,51727";
-const char *baseColorLukeBespin = "937,9304,65535";
-const char *baseColorLukeRotj = "0,65535,0";
-const char *baseColorKatarn = "1,4057,65535";
-const char *baseColorWindu = "27911,93,65535";
-const char *baseColorYoda3 = "110,55786,11";
-const char *baseColorDooku3 = "65535,32,0";
-const char *baseColorMaul = "14386,110,0";
-const char *baseColorPalpatine3 = "44108,24,3";
+for key,val in baseColorValues.items():
+   print("#define BASE_COLOR_{} \"{}\"".format(key.upper(), getString16(val[0], val[1], val[2]))) */
+
+#define STYLE_INDEX_0 "0 "
+#define STYLE_INDEX_1 "1 "
+#define STYLE_INDEX_2 "2 "
+#define STYLE_INDEX_3 "3 "
+#define STYLE_INDEX_4 "4 "
+#define STYLE_INDEX_5 "5 "
+#define STYLE_INDEX_6 "6 "
+#define STYLE_INDEX_7 "7 "
+#define STYLE_INDEX_8 "8 "
+#define STYLE_PLACEHOLDER "~ "
+#define BASE_COLOR_ANAKIN3 "128,2243,65535 "
+#define BASE_COLOR_VADERANH "65535,148,7 "
+#define BASE_COLOR_VADERESB "65535,0,0 "
+#define BASE_COLOR_VADERROTJ "65535,0,0 "
+#define BASE_COLOR_OBI3 "3,128,65535 "
+#define BASE_COLOR_OBIANH "32,4438,54756 "
+#define BASE_COLOR_LUKEANH "4838,27206,54756 "
+#define BASE_COLOR_LUKEDAGOBAH "1739,15911,51727 "
+#define BASE_COLOR_LUKEBESPIN "937,9304,65535 "
+#define BASE_COLOR_LUKEROTJ "0,65535,0 "
+#define BASE_COLOR_KATARN "1,4057,65535 "
+#define BASE_COLOR_WINDU "27911,93,65535 "
+#define BASE_COLOR_YODA3 "110,55786,11 "
+#define BASE_COLOR_DOOKU3 "65535,32,0 "
+#define BASE_COLOR_PALPATINE3 "44108,24,3 "
 
 #ifdef SABER_VEEONE
-#define KEEGAN_PRESET(fontdirs, track, mainPreset, baseColor, editName) fontdirs, track, StylePtr<mainPreset>(baseColor), StylePtr<CrystalChamberTopPreset>(baseColor), StylePtr<CrystalChamberBottomPreset>(baseColor), StylePtr<BlinkyRedPreset>(), StylePtr<BlinkyGreenPreset>(), editName
+#define KEEGAN_PRESET(fontdirs, track, mainPreset, baseColor, editName) fontdirs, track, StylePtr<mainPreset>(baseColor), StylePtr<StyleCombinedRotoscopeChamber>(baseColor), StylePtr<BlinkyRedPreset>(), StylePtr<BlinkyGreenPreset>(), editName
 #else
 #define KEEGAN_PRESET(fontdirs, track, mainPreset, baseColor, editName) fontdirs, track, StylePtr<mainPreset>(baseColor), StylePtr<AccentPresetFett263OriginalTrilogyFett263>(baseColor), editName
 #endif
 
+ // STYLE_PLACEHOLDER  //BASE_COLOR_ARG = 1
+ // STYLE_PLACEHOLDER  //ALT_COLOR_ARG = 2
+ // STYLE_PLACEHOLDER  //STYLE_OPTION_ARG = 3
+ // STYLE_PLACEHOLDER  //IGNITION_OPTION_ARG = 4
+ // STYLE_PLACEHOLDER  //IGNITION_TIME_ARG = 5
+ // STYLE_PLACEHOLDER  //IGNITION_DELAY_ARG = 6
+ // STYLE_PLACEHOLDER  //IGNITION_COLOR_ARG = 7
+ // STYLE_PLACEHOLDER  //IGNITION_POWER_UP_ARG = 8
+ // STYLE_PLACEHOLDER  //BLAST_COLOR_ARG = 9
+ // STYLE_PLACEHOLDER  //CLASH_COLOR_ARG = 10
+ // STYLE_PLACEHOLDER  //LOCKUP_COLOR_ARG = 11
+ // STYLE_PLACEHOLDER  //LOCKUP_POSITION_ARG = 12
+ // STYLE_PLACEHOLDER  //DRAG_COLOR_ARG = 13
+ // STYLE_PLACEHOLDER  //DRAG_SIZE_ARG = 14
+ // STYLE_PLACEHOLDER  //LB_COLOR_ARG = 15
+ // STYLE_PLACEHOLDER  //STAB_COLOR_ARG = 16
+ // STYLE_PLACEHOLDER  //MELT_SIZE_ARG = 17
+ // STYLE_PLACEHOLDER  //SWING_COLOR_ARG = 18
+ // STYLE_PLACEHOLDER  //SWING_OPTION_ARG = 19
+ // STYLE_PLACEHOLDER  //EMITTER_COLOR_ARG = 20
+ // STYLE_PLACEHOLDER  //EMITTER_SIZE_ARG = 21
+ // STYLE_PLACEHOLDER  //PREON_COLOR_ARG = 22
+ // STYLE_PLACEHOLDER  //PREON_OPTION_ARG = 23
+ // STYLE_PLACEHOLDER  //PREON_SIZE_ARG = 24
+ // STYLE_PLACEHOLDER  //RETRACTION_OPTION_ARG = 25
+ // STYLE_PLACEHOLDER  //RETRACTION_TIME_ARG = 26
+ // STYLE_PLACEHOLDER  //RETRACTION_DELAY_ARG = 27
+ // STYLE_PLACEHOLDER  //RETRACTION_COLOR_ARG = 28
+ // STYLE_PLACEHOLDER  //RETRACTION_COOL_DOWN_ARG = 29
+ // STYLE_PLACEHOLDER  //POSTOFF_COLOR_ARG = 30
+ // STYLE_PLACEHOLDER  //OFF_COLOR_ARG = 31
+ // STYLE_PLACEHOLDER  //OFF_OPTION_ARG = 32
+ // STYLE_PLACEHOLDER  //ALT_COLOR2_ARG = 33
+ // STYLE_PLACEHOLDER  //ALT_COLOR3_ARG = 34
+ // STYLE_PLACEHOLDER  //STYLE_OPTION2_ARG = 35
+ // STYLE_PLACEHOLDER  //STYLE_OPTION3_ARG = 36
+ // STYLE_PLACEHOLDER  //IGNITION_OPTION2_ARG = 37
+ // STYLE_PLACEHOLDER  //RETRACTION_OPTION2_ARG = 38
+
 Preset presets[] = {
     // TODO Tracks probably don't make sense for father
-    {KEEGAN_PRESET("FatherV2ANH;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorVaderAnh, "FatherANH")},
-    {KEEGAN_PRESET("FatherV2ANH;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorVaderAnh, "FatherANH")},
-    {KEEGAN_PRESET("FatherV2ESB;common", "tracks/track2.wav", MainPresetFett263OriginalTrilogyFett263, baseColorVaderEsb, "FatherESB")},
-    {KEEGAN_PRESET("FatherV2ROTJ;common", "tracks/track3.wav", MainPresetFett263OriginalTrilogyFett263, baseColorVaderRotj, "FatherROTJ")},
-    {KEEGAN_PRESET("FatherV2R1;common", "tracks/track4.wav", MainPresetFett263SequelsFett263, baseColorVaderAnh, "FatherR1")},
-    {KEEGAN_PRESET("KSith_WhatRemains;common", "tracks/track1.wav", MainPresetFett263SequelsFett263, baseColorVaderAnh, "KSith_WhatRemains")},
-    {KEEGAN_PRESET("KSith_CrimsonMenace;common", "tracks/Duel of the Fates.wav", MainPresetFett263SequelsFett263, baseColorVaderAnh, "KSith_CrimsonMenace")},
-    {KEEGAN_PRESET("KSith_KRossguardTFA;common", "tracks/Kylo_Theme.wav", MainPresetFett263KyloRen, baseColorVaderAnh, "KSith_KRossguardTFA")},
-    {KEEGAN_PRESET("KSith_KRossguardTLJ;common", "tracks/Kylo_Theme2.wav", MainPresetFett263KyloRen, baseColorVaderAnh, "KSith_KRossguardTLJ")},
-    {KEEGAN_PRESET("KSith_KRossguardTROS;common", "tracks/Supreme_Leader_Kylo.wav", MainPresetFett263KyloRenSupremeLeader, baseColorVaderAnh, "KSith_KRossguardTROS")},
+    {KEEGAN_PRESET("FatherV2ANH;common", "tracks/track1.wav", StyleCombinedRotoscopeMain,
+    	BASE_COLOR_VADERANH // BASE_COLOR_ARG = 1
+    	STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+    	STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+    	"FatherANH0")},
+    {KEEGAN_PRESET("FatherV2ESB;common", "tracks/track2.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_VADERESB // BASE_COLOR_ARG_1
+    	STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+        "FatherESB")},
+    {KEEGAN_PRESET("FatherV2ROTJ;common", "tracks/track3.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_VADERROTJ // BASE_COLOR_ARG_1
+    	STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+        "FatherROTJ")},
+    {KEEGAN_PRESET("FatherV2R1;common", "tracks/track4.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_VADERANH // BASE_COLOR_ARG_1
+    	STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_2, // STYLE_OPTION_ARG = 3
+        "FatherR1")},
+    {KEEGAN_PRESET("KSith_WhatRemains;common", "tracks/track1.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_VADERANH // BASE_COLOR_ARG_1
+    	STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_WhatRemains")},
+    {KEEGAN_PRESET("KSith_CrimsonMenace;common", "tracks/Duel of the Fates.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_VADERANH // BASE_COLOR_ARG_1
+    	STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_CrimsonMenace")},
+    {KEEGAN_PRESET("KSith_KRossguardTFA;common", "tracks/Kylo_Theme.wav", MainPresetFett263KyloRen, BASE_COLOR_VADERANH, "KSith_KRossguardTFA")},
+    {KEEGAN_PRESET("KSith_KRossguardTLJ;common", "tracks/Kylo_Theme2.wav", MainPresetFett263KyloRen, BASE_COLOR_VADERANH, "KSith_KRossguardTLJ")},
+    {KEEGAN_PRESET("KSith_KRossguardTROS;common", "tracks/Supreme_Leader_Kylo.wav", MainPresetFett263KyloRenSupremeLeader, BASE_COLOR_VADERANH, "KSith_KRossguardTROS")},
+
     // TODO Tracks probably don't make sense for OB4
-    {KEEGAN_PRESET("OB4V2Rebels;common", "tracks/track1.wav", MainPresetFett263PrequelsFett263, baseColorObi3, "OB4V2Rebels")},
-    {KEEGAN_PRESET("OB4V2Cantina;common", "tracks/track2.wav", MainPresetFett263OriginalTrilogyFett263, baseColorObiAnh, "OB4V2Cantina")},
-    {KEEGAN_PRESET("OB4V2DeathStar;common", "tracks/track3.wav", MainPresetFett263OriginalTrilogyFett263, baseColorObiAnh, "OB4V2DeathStar")},
-    {KEEGAN_PRESET("BMF;common", "tracks/track1.wav", MainPresetFett263SequelsFett263, baseColorWindu, "BMF")},
-    {KEEGAN_PRESET("ANH_Graflex;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeAnh, "ANH_GraflexV2")},
-    {KEEGAN_PRESET("ANH_Training;common", "tracks/training_ambience.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeAnh, "ANH_TrainingV2")},
-    {KEEGAN_PRESET("ESB_Graflex_V2;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeDagobah, "ESB_Graflex_V2")},
-    {KEEGAN_PRESET("The_Return_V2;common", "tracks/track1.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "The_Return_V2")},
-    {KEEGAN_PRESET("KSith_LS6CaveScene;common", "", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "KSith_LS6CaveScene")},
-    {KEEGAN_PRESET("KSith_LS6Classic;common", "", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "KSith_LS6Classic")},
-    {KEEGAN_PRESET("KSith_LS6OldVersion;common", "", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "KSith_LS6OldVersion")},
-    {KEEGAN_PRESET("KSith_Rescue;common", "tracks/Hallway_Long.wav", MainPresetFett263OriginalTrilogyFett263, baseColorLukeRotj, "KSith_LS6OldVersion")},
-    {KEEGAN_PRESET("Outcast_Knight;common", "", MainPresetFett263OriginalTrilogyFett263, baseColorKatarn, "Outcast_Knight")},
+    {KEEGAN_PRESET("OB4V2Rebels;common", "tracks/track1.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_OBI3 // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "OB4V2Rebels")},
+    {KEEGAN_PRESET("OB4V2Cantina;common", "tracks/track2.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_OBIANH // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "OB4V2Cantina")},
+    {KEEGAN_PRESET("OB4V2DeathStar;common", "tracks/track3.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_OBIANH, "OB4V2DeathStar")},
+    {KEEGAN_PRESET("BMF;common", "tracks/track1.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_WINDU // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "BMF")},
+    {KEEGAN_PRESET("ANH_Graflex;common", "tracks/track1.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_LUKEANH // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+        "ANH_GraflexV2")},
+    {KEEGAN_PRESET("ANH_Training;common", "tracks/training_ambience.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_LUKEANH // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+        "ANH_TrainingV2")},
+    {KEEGAN_PRESET("ESB_Graflex_V2;common", "tracks/track1.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_LUKEDAGOBAH // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+        "ESB_Graflex_V2")},
+    {KEEGAN_PRESET("The_Return_V2;common", "tracks/track1.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_LUKEROTJ // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+        "The_Return_V2")},
+    {KEEGAN_PRESET("KSith_LS6CaveScene;common", "", StyleCombinedRotoscopeMain,
+        BASE_COLOR_LUKEROTJ // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+        "KSith_LS6CaveScene")},
+    {KEEGAN_PRESET("KSith_LS6Classic;common", "", StyleCombinedRotoscopeMain,
+        BASE_COLOR_LUKEROTJ // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+        "KSith_LS6Classic")},
+    {KEEGAN_PRESET("KSith_LS6OldVersion;common", "", StyleCombinedRotoscopeMain,
+        BASE_COLOR_LUKEROTJ // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_0, // STYLE_OPTION_ARG = 3
+        "KSith_LS6OldVersion")},
+    {KEEGAN_PRESET("KSith_Rescue;common", "tracks/Hallway_Long.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_LUKEROTJ // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_2, // STYLE_OPTION_ARG = 3
+        "KSith_LS6OldVersion")},
+    {KEEGAN_PRESET("Outcast_Knight;common", "", StyleCombinedRotoscopeMain,
+        BASE_COLOR_KATARN // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_2, // STYLE_OPTION_ARG = 3
+        "Outcast_Knight")},
     {KEEGAN_PRESET("Fire;common", "", ControlMainResponsiveFlameRealFlameGradientBaseColor, "", "fire")},
     {KEEGAN_PRESET("Great_Mother_V2;common", "tracks/track1.wav", ControlMainBladeofTalzinBaseColor,"", "morgan")},
     {KEEGAN_PRESET("SurvivorSingle;common", "", ControlMainCalKestisSurvivorBlueKyberSelectSpecialAbility,"", "SurvivorSingle")},
     {KEEGAN_PRESET("SurvivorCrossguard;common", "", ControlMainCalKestisSurvivorBlueKyberSelectSpecialAbility,"", "SurvivorCrossguard")},
-    {KEEGAN_PRESET("KSith_TheChosenOneHero;common", "tracks/Battle of the Heroes.wav", MainPresetFett263PrequelsFett263, baseColorLukeAnh, "KSith_TheChosenOneHero")},
-    {KEEGAN_PRESET("KSith_TheChosenOneVillain;common", "tracks/Anakin's Turn.wav", MainPresetFett263PrequelsFett263, baseColorVaderAnh, "KSith_TheChosenOneVillain")},
-    {KEEGAN_PRESET("KSith_TheSenateTCW;common", "tracks/Palpy1.wav", MainPresetFett263PrequelsFett263, baseColorPalpatine3, "KSith_TheSenateTCW")},
-    {KEEGAN_PRESET("KSith_TheSenateROTS;common", "tracks/Order66.wav", MainPresetFett263PrequelsFett263, baseColorPalpatine3, "KSith_TheSenateROTS")},
-    {KEEGAN_PRESET("KSith_Savage;common", "tracks/track1.wav", MainPresetFett263PrequelsFett263, baseColorVaderAnh, "KSith_Savage")},
-    {KEEGAN_PRESET("KSith_CrimsonMenace;common", "tracks/mars.wav", MainPresetFett263PrequelsFett263, baseColorVaderAnh, "KSith_CrimsonMenace")},
-    {KEEGAN_PRESET("KSith_GrandMaster;common", "tracks/Track1_Dooku vs Yoda.wav", MainPresetFett263PrequelsFett263, baseColorYoda3, "KSith_GrandMaster")},
-    {KEEGAN_PRESET("The_Counts_Claw_V2AOTC;common", "tracks/track1.wav", MainPresetFett263PrequelsFett263, baseColorDooku3, "The_Counts_Claw_V2AOTC")},
-    {KEEGAN_PRESET("The_Counts_Claw_V2ROTS;common", "tracks/track2.wav", MainPresetFett263PrequelsFett263, baseColorDooku3, "The_Counts_Claw_V2ROTS")},
-    {KEEGAN_PRESET("KSith_TheBoldOne;common", "tracks/Anakin vs Obi.wav", MainPresetFett263PrequelsFett263, baseColorObi3, "KSith_TheBoldOne")},
+    {KEEGAN_PRESET("KSith_TheChosenOneHero;common", "tracks/Battle of the Heroes.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_LUKEANH // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_TheChosenOneHero")},
+    {KEEGAN_PRESET("KSith_TheChosenOneVillain;common", "tracks/Anakin's Turn.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_VADERANH // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_TheChosenOneVillain")},
+    {KEEGAN_PRESET("KSith_TheSenateTCW;common", "tracks/Palpy1.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_PALPATINE3 // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_TheSenateTCW")},
+    {KEEGAN_PRESET("KSith_TheSenateROTS;common", "tracks/Order66.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_PALPATINE3 // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_TheSenateROTS")},
+    {KEEGAN_PRESET("KSith_Savage;common", "tracks/track1.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_VADERANH // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_Savage")},
+    {KEEGAN_PRESET("KSith_CrimsonMenace;common", "tracks/mars.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_VADERANH // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_CrimsonMenace")},
+    {KEEGAN_PRESET("KSith_GrandMaster;common", "tracks/Track1_Dooku vs Yoda.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_YODA3 // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_GrandMaster")},
+    {KEEGAN_PRESET("The_Counts_Claw_V2AOTC;common", "tracks/track1.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_DOOKU3 // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "The_Counts_Claw_V2AOTC")},
+    {KEEGAN_PRESET("The_Counts_Claw_V2ROTS;common", "tracks/track2.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_DOOKU3 // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "The_Counts_Claw_V2ROTS")},
+    {KEEGAN_PRESET("KSith_TheBoldOne;common", "tracks/Anakin vs Obi.wav", StyleCombinedRotoscopeMain,
+        BASE_COLOR_OBI3 // BASE_COLOR_ARG = 1
+        STYLE_PLACEHOLDER // ALT_COLOR_ARG = 2
+        STYLE_INDEX_1, // STYLE_OPTION_ARG = 3
+        "KSith_TheBoldOne")},
     {KEEGAN_PRESET("GODZILLA;common", "", MountSaberFontsGodzilla, "", "GODZILLA")},
     {KEEGAN_PRESET("MECHAGODZILLA;common", "", MountSaberFontsMechagodzilla, "", "MECHAGODZILLA")},
     {KEEGAN_PRESET("JURASSIC;common", "", MountSaberFontsJurassic, "", "JURASSIC")}
-
 };
 
 BladeConfig blades[] = {
 #ifdef SABER_VEEONE
-    { 0, WS281XBladePtr<133, bladePin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3> >(),
+    { 0, WS281XBladePtr<128, bladePin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3> >(),
+    ComboBlade(WS281XBladePtr<1, blade4Pin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3> >(),
+               WS281XBladePtr<1, blade3Pin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3>>()),
+#if 0
     WS281XBladePtr<1, blade4Pin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3> >(),
     WS281XBladePtr<1, blade3Pin, Color8::GRB, PowerPINS<bladePowerPin2, bladePowerPin3> >(),
+#endif //0
     SimpleBladePtr<CH1LED, NoLED, NoLED, NoLED, bladePowerPin7, -1, -1, -1>(),
 	SimpleBladePtr<CH2LED, NoLED, NoLED, NoLED, bladePowerPin8, -1, -1, -1>(),
 #else

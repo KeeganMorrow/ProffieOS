@@ -25,7 +25,7 @@
 |  Add the slashes to any that you are not using.                   |
 \*-----------------------------------------------------------------*/
 
-// #define CONFIG_FILE "config/YOUR_CONFIG_FILE_NAME_HERE.h"
+#define CONFIG_FILE "config/keegan_vader89.h"
 
 // #define CONFIG_FILE "config/default_proffieboard_config.h"
 // #define CONFIG_FILE "config/proffieboard_v1_test_bench_config.h"
@@ -628,6 +628,7 @@ class NoLED;
 #include "blades/simple_blade.h"
 #include "blades/saviblade.h"
 #include "blades/sub_blade.h"
+#include "blades/combo_blade.h"
 #include "blades/dim_blade.h"
 #include "blades/blade_id.h"
 #include "common/preset.h"
