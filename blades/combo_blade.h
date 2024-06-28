@@ -104,12 +104,13 @@ public:
       blade2_->clear();
   }
 
-  void Activate() override {
+  void Activate(int blade_number) override {
     if (blade_)
-      blade_->Activate();
+      blade_->Activate(blade_number);
     if (blade2_)
-      blade2_->Activate();
+      blade2_->Activate(blade_number);
   }
+
   void Deactivate() override {
     if (blade_)
       blade_->Deactivate();
