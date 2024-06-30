@@ -41,8 +41,10 @@ class ComboBladeWrapper : public BladeWrapper, BladeStyle {
 public:
   ComboBladeWrapper(BladeBase* blade1, BladeBase* blade2):
     blade1_num_leds_(blade1->num_leds()),
+    blade2_num_leds_(blade2->num_leds()),
     blade2_(blade2),
-    real_style_(nullptr)
+    real_style_(nullptr),
+    blade2_cache_(new OverDriveColor[blade2_num_leds_])
   {
     blade_ = blade1;
   }
@@ -57,6 +59,15 @@ public:
   virtual void run(BladeBase* blade) override {
     if (blade == blade_) {
       real_style_->run(this);
+    } else {
+      // On blade2_ we just apply cached values from when blade_ was run
+      for (int i = 0; i < blade2_num_leds_; i++){
+        if (blade2_cache_[i].overdrive) {
+          blade2_->set_overdrive(i, blade2_cache_[i].c);
+        } else {
+          blade2_->set(i, blade2_cache_[i].c);
+        }
+      }
     }
   }
 
@@ -67,9 +78,7 @@ public:
   virtual bool Charging() { return real_style_->Charging(); }
 
   bool IsHandled(HandledFeature effect) override {
-    if (real_style_)
-      return real_style_->IsHandled(effect);
-    return false;
+    return real_style_->IsHandled(effect);
   }
 
   OverDriveColor getColor(int i) override { return real_style_->getColor(i); }
@@ -78,20 +87,23 @@ public:
 
   // BladeBase implementation
   int num_leds() const override {
-    return blade1_num_leds_ + blade2_->num_leds();
+    return blade1_num_leds_ + blade2_num_leds_;
   }
   void set(int led, Color16 c) override {
     if (led < blade1_num_leds_) {
       return blade_->set(led, c);
     } else {
-      return blade2_->set(led - blade1_num_leds_, c);
+      blade2_cache_[led - blade1_num_leds_].c = c;
+      blade2_cache_[led - blade1_num_leds_].overdrive = false;
     }
   }
+
   void set_overdrive(int led, Color16 c) override {
     if (led < blade1_num_leds_) {
       return blade_->set_overdrive(led, c);
     } else {
-      return blade2_->set_overdrive(led - blade1_num_leds_, c);
+      blade2_cache_[led - blade1_num_leds_].c = c;
+      blade2_cache_[led - blade1_num_leds_].overdrive = true;
     }
   }
 
@@ -122,9 +134,12 @@ public:
   }
 
   BladeStyle* UnSetStyle() override {
-    BladeStyle* result = real_style_;
+    BladeStyle* ret = real_style_;
+    if (ret) {
+      ret->deactivate();
+    }
     real_style_ = nullptr;
-    return result;
+    return ret;
   }
 
   BladeStyle* current_style() const override {
@@ -133,8 +148,10 @@ public:
 
 private:
   int blade1_num_leds_;
+  int blade2_num_leds_;
   BladeBase* blade2_;
   BladeStyle* real_style_;
+  OverDriveColor *blade2_cache_;
 };
 
 BladeBase* ComboBlade(BladeBase* blade1, BladeBase* blade2)
